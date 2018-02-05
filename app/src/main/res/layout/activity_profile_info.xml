@@ -60,6 +60,22 @@
         app:layout_constraintTop_toBottomOf="@+id/name"
         app:layout_constraintVertical_bias="0.39" />
 
+    <Button
+        android:id="@+id/follow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark_default"
+        android:text="გამოწერის გაუქმება"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="0.39" />
+
     <ProgressBar
         android:id="@+id/mPRO"
         style="?android:attr/progressBarStyle"
@@ -73,4 +89,20 @@
         app:layout_constraintEnd_toEndOf="@+id/circleImageView"
         app:layout_constraintStart_toStartOf="@+id/circleImageView"
         app:layout_constraintTop_toTopOf="@+id/circleImageView" />
+
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progressBar4"
+
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:indicatorColor="your color"
+        app:indicatorName="BallPulseIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView"
+        app:layout_constraintVertical_bias="0.61" />
 </android.support.constraint.ConstraintLayout>

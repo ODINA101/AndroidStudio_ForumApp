@@ -99,7 +99,7 @@ public class forumActivity extends AppCompatActivity {
 
                 } else {
 
-                    Picasso.with( forumActivity.this ).load(R.drawable.user).into(  mUserPhoto);
+                    Picasso.with( forumActivity.this ).load(R.drawable.user).into(mUserPhoto);
                     findViewById( R.id.aviLoader ).setVisibility( View.GONE );
 
 
