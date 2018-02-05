@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActivityTransitions">false</item>
+    </style>
+    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+        <item name="colorPrimary">@android:color/transparent</item>
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+    <style name="AppTheme.ActionBar" parent="AppTheme">
+        <item name="colorPrimaryDark">#03A9F4</item>
+        <item name="colorPrimary">#CDDC39</item>
+    </style>
+</resources>

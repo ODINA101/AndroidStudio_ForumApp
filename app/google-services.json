@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "963327341994",
+    "firebase_url": "https://geoforum-34d6a.firebaseio.com",
+    "project_id": "geoforum-34d6a",
+    "storage_bucket": "geoforum-34d6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963327341994:android:ac88e380ff616401",
+        "android_client_info": {
+          "package_name": "app.iraklisamniashvilii.com.geoforum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963327341994-ep4bldoccgd60qolfs8n35gr8678ggau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.iraklisamniashvilii.com.geoforum",
+            "certificate_hash": "43005386a26b58df791263f79af7e5e87b6aebc3"
+          }
+        },
+        {
+          "client_id": "963327341994-0og1vqu2387f50llcfa78v758a154mh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYdnhmWckn1WBWjOMYJCcPnZr_dpdwn7g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963327341994-0og1vqu2387f50llcfa78v758a154mh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

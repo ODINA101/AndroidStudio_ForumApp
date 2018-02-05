@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:animateLayoutChanges="true"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="#iraklis pasuxi"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/commentTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="თქვენი კომენტარი"
+        android:inputType="textPersonName" />
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#F44336"
+        android:text="დახურვა"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/publish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#64DD17"
+        android:text="გამოქვეყნება"
+        android:textColor="#FFF" />
+</LinearLayout>
+
+</LinearLayout>
