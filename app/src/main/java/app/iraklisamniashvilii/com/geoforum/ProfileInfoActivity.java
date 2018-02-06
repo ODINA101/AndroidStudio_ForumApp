@@ -26,7 +26,6 @@ public class ProfileInfoActivity extends AppCompatActivity {
   public CircleImageView circleImageView;
   public Button follow;
   public Button disfollow;
-public ProgressBar progressBar2;
   public FirebaseDatabase firebaseDatabase;
   public DatabaseReference db;
 public String uid;
@@ -46,12 +45,9 @@ public ProgressBar mProgress;
          uid = getIntent().getExtras().getString( "uid" );
 
 
-      progressBar2 = findViewById(R.id.progressBar4);
 
 
- progressBar2.animate();
 
-        progressBar2.setVisibility(View.VISIBLE);
 
          name.setText( getIntent().getExtras().getString( "name" ) );
         follow = findViewById( R.id.follow );
@@ -74,7 +70,6 @@ public ProgressBar mProgress;
  disfollow.setOnClickListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-         progressBar2.setVisibility(View.VISIBLE);
          follow.setVisibility(View.GONE);
          disfollow.setVisibility(View.GONE);
 //         me.child("following").child(uid).getRef().removeValue();

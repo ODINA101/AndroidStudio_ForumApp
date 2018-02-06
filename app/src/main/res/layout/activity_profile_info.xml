@@ -91,18 +91,4 @@
         app:layout_constraintTop_toTopOf="@+id/circleImageView" />
 
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/progressBar4"
-
-        style="@style/AVLoadingIndicatorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:indicatorColor="your color"
-        app:indicatorName="BallPulseIndicator"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circleImageView"
-        app:layout_constraintVertical_bias="0.61" />
 </android.support.constraint.ConstraintLayout>
