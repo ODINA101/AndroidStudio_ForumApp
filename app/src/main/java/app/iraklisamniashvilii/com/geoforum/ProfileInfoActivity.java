@@ -72,8 +72,10 @@ public ProgressBar mProgress;
      public void onClick(View v) {
          follow.setVisibility(View.GONE);
          disfollow.setVisibility(View.GONE);
-//         me.child("following").child(uid).getRef().removeValue();
-//         db.child("followers").child(FirebaseAuth.getInstance().getUid()).getRef().removeValue();
+       me.child("following").child(uid).getRef().removeValue();
+         db.child("followers").child(FirebaseAuth.getInstance().getUid()).getRef().removeValue();
+         me.child("chats").child(uid).getRef().removeValue();
+         db.child("chats").child(FirebaseAuth.getInstance().getUid()).getRef().removeValue();
          follow.setVisibility(View.VISIBLE);
 
 
@@ -82,57 +84,28 @@ public ProgressBar mProgress;
  });
 
 
-//        db.child("followers").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.child(FirebaseAuth.getInstance().getUid()).exists()) {
-//                                       disfollow.setVisibility(View.VISIBLE);
-//                    progressBar2.setVisibility(View.GONE);
-//                    follow.setVisibility(View.GONE);
-//
-//
-//                    Log.d("kvanwebii", String.valueOf(dataSnapshot.child(FirebaseAuth.getInstance().getUid())));
-//                }else{
-//                                    follow.setVisibility(View.VISIBLE);
-//                                    disfollow.setVisibility(View.GONE);
-//                    progressBar2.setVisibility(View.GONE);
-//
-//                }
-//
-//
-//                }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+       db.child("followers").addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(FirebaseAuth.getInstance().getUid()).exists()) {
+                                       disfollow.setVisibility(View.VISIBLE);
+                    follow.setVisibility(View.GONE);
 
-//        me.child("following").child(uid).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//
-//                Log.d("aleehop", String.valueOf(dataSnapshot));
-//                if (dataSnapshot.child("ktx") != null) {
-//                    if (dataSnapshot.child("ktx").getValue().equals("Youfollowing")) {
-//
-//                    } else {
-//
-//                    }
-//                }
-//            }
-//
-//
-//
-//
-//
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+
+                   Log.d("kvanwebii", String.valueOf(dataSnapshot.child(FirebaseAuth.getInstance().getUid())));
+               }else{
+                                     follow.setVisibility(View.VISIBLE);
+                                   disfollow.setVisibility(View.GONE);
+               }
+
+                }
+
+             @Override
+           public void onCancelled(DatabaseError databaseError) {
+             }
+         });
+
+
 
 
 
@@ -146,11 +119,21 @@ public ProgressBar mProgress;
              @Override
              public void onClick(View view) {
                  HashMap<String,String> mMap1 = new HashMap<>();
-                 mMap1.put("ktx","isFollowing");
+                 mMap1.put("uid",FirebaseAuth.getInstance().getUid());
+
                  db.child("followers").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
+                 db.child("chats").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
+
+
+
              HashMap<String,String> mMap = new HashMap<>();
-                 mMap.put("ktx","Youfollowing");
+                 mMap.put("uid",uid);
+
+
+
+
                  me.child("following").child(uid).setValue(mMap);
+                 me.child("chats").child(uid).setValue(mMap);
 
              }
          } );

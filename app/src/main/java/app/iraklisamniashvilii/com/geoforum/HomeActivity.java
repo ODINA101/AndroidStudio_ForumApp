@@ -164,7 +164,7 @@ public class HomeActivity extends AppCompatActivity
             fragment = new NotificationsActivity();
 
         } else if (id == R.id.nav_chat) {
-
+           fragment = new Chat();
         } else if (id == R.id.nav_logout) {
             mAuth.getInstance().signOut();
             fragment = new Logout();
