@@ -88,9 +88,9 @@ public class SettingsActivity extends AppCompatActivity {
 
          settings_name.setText( dataSnapshot.child("name").getValue().toString() );
 
-        if(!dataSnapshot.child( "image" ).getValue().equals("default")) {
+        if(!dataSnapshot.child( "thumb_image" ).getValue().equals("default")) {
 
-            Picasso.with(SettingsActivity.this).load(dataSnapshot.child( "image" ).getValue().toString()).placeholder( R.drawable.white ).into(mDisplayImage,new com.squareup.picasso.Callback(){
+            Picasso.with(SettingsActivity.this).load(dataSnapshot.child( "thumb_image" ).getValue().toString()).placeholder( R.drawable.white ).into(mDisplayImage,new com.squareup.picasso.Callback(){
                 @Override
                 public void onSuccess() {
                     progressBar.setVisibility( View.GONE );
@@ -163,64 +163,42 @@ public class SettingsActivity extends AppCompatActivity {
                 String current_user_id = mCurrentUser.getUid();
                 Uri resultUri = result.getUri();
                 final File thumb_filePath = new File(resultUri.getPath());
-                try {
-                    Bitmap thumb_bitmap = new Compressor( this ).setMaxWidth( 200 )
-                            .setMaxHeight( 200 )
-                            .setQuality( 75 )
-                            .compressToBitmap( thumb_filePath );
+                Bitmap thumb_bitmap = new Compressor( this ).setMaxWidth( 200 )
+                        .setMaxHeight( 200 )
+                        .setQuality( 10 )
+                        .compressToBitmap( thumb_filePath );
 
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream(  );
-                    thumb_bitmap.compress( Bitmap.CompressFormat.JPEG,100,baos );
-                    final byte[] thumb_byte = baos.toByteArray();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(  );
+                thumb_bitmap.compress( Bitmap.CompressFormat.JPEG,100,baos );
+                final byte[] thumb_byte = baos.toByteArray();
 
-                    StorageReference thumb_filepath = mImageStorage.child("profile_image").child("thumbs").child(current_user_id + ".jpg");
+                StorageReference thumb_filepath = mImageStorage.child("profile_image").child("thumbs").child(current_user_id + ".jpg");
 
-                    UploadTask uploadTask = thumb_filepath.putBytes( thumb_byte );
-                    uploadTask.addOnCompleteListener( new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if(task.isSuccessful()) {
-                                String thumb_downloadurl = task.getResult().getDownloadUrl().toString();
-                                mUserData.child("thumb_image").setValue( thumb_downloadurl ).addOnCompleteListener( new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()) {
-
-                                        }
-                                    }
-                                } );
-                                }
-                        }
-                    } );
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                StorageReference filepath = mImageStorage.child("profile_image").child(current_user_id + ".jpg");
-
-                filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                UploadTask uploadTask = thumb_filepath.putBytes( thumb_byte );
+                uploadTask.addOnCompleteListener( new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            String downloadURL = task.getResult().getDownloadUrl().toString();
-                            mUserData.child("image").setValue(downloadURL).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        if(task.isSuccessful()) {
+                            String thumb_downloadurl = task.getResult().getDownloadUrl().toString();
+                            mUserData.child("thumb_image").setValue( thumb_downloadurl ).addOnCompleteListener( new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
+                                    if(task.isSuccessful()) {
                                         mProgressDialog.dismiss();
                                         Toast.makeText(SettingsActivity.this, "პროფილის ფოტო შეცვლილია", Toast.LENGTH_LONG).show();
-
                                     }
                                 }
-                            });
-                        } else {
+                            } );
+                            }else{
                             Toast.makeText(SettingsActivity.this, "მოხდა შეცდომა", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
                         }
                     }
-                });
+                } );
+
+
+
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

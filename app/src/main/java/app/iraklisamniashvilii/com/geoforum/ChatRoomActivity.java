@@ -134,7 +134,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
 
-          viewHolder.setMsg(model.getTxt() + " " + this.getItemCount());
+          viewHolder.setMsg(model.getTxt());
 
 
                 if(model.getUid().toString().equals(FirebaseAuth.getInstance().getUid())) {
@@ -149,7 +149,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 }
 
-messages_recycler.scrollToPosition(this.getItemCount());
             }
 
 
