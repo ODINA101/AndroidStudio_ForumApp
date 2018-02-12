@@ -17,7 +17,7 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
     <style name="AppTheme.ActionBar" parent="AppTheme">
-        <item name="colorPrimaryDark">#03A9F4</item>
-        <item name="colorPrimary">#CDDC39</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 </resources>

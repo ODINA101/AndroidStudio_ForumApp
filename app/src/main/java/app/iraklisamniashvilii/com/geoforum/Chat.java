@@ -1,11 +1,13 @@
 package app.iraklisamniashvilii.com.geoforum;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -62,11 +64,19 @@ public class Chat extends Fragment {
 
         ) {
             @Override
-            protected void populateViewHolder(ChatusersHolder viewHolder, Chatusers model, int position) {
+            protected void populateViewHolder(ChatusersHolder viewHolder, final Chatusers model, int position) {
 
 
 
                 viewHolder.setDet(model.getUid());
+                viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent chatroom = new Intent(getContext(),ChatRoomActivity.class);
+                        chatroom.putExtra("uid",model.getUid());
+                        startActivity(chatroom);
+                    }
+                });
 
 
             }
@@ -81,6 +91,7 @@ public class Chat extends Fragment {
 TextView name;
 View mview;
 ProgressBar progressBari;
+public CardView cardView;
 CircleImageView circleImageView;
         public ChatusersHolder(View itemView) {
             super(itemView);
@@ -89,6 +100,8 @@ CircleImageView circleImageView;
             circleImageView = itemView.findViewById(R.id.thumb);
             progressBari = itemView.findViewById(R.id.progressBari);
             progressBari.animate();
+            cardView = mview.findViewById(R.id.mCard);
+
         }
 
 

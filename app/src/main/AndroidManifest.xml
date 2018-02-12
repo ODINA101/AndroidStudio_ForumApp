@@ -47,15 +47,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NotificationsActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".forumActivity"
             android:label="@string/title_activity_forum"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ProfileInfoActivity"
+        <activity
+            android:name=".ProfileInfoActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity android:theme="@style/AppTheme.NoActionBar" android:name=".ChatRoomActivity" />
     </application>
 
 </manifest>
