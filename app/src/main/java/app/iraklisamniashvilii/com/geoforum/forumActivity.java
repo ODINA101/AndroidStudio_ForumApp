@@ -163,7 +163,6 @@ public class forumActivity extends AppCompatActivity {
                                         mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        mDatabase.push().child("date").setValue(ServerValue.TIMESTAMP);
                                     }
                                 });
 

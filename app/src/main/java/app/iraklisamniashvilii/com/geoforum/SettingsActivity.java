@@ -82,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if(!dataSnapshot.child( "thumb_image" ).getValue().equals("default")) {
 
-            Picasso.with(SettingsActivity.this).load((Uri) dataSnapshot.child( "thumb_image" ).getValue()).placeholder( R.drawable.white ).into(mDisplayImage,new com.squareup.picasso.Callback(){
+            Picasso.with(SettingsActivity.this).load(dataSnapshot.child( "thumb_image" ).getValue().toString()).placeholder( R.drawable.white ).into(mDisplayImage,new com.squareup.picasso.Callback(){
                 @Override
                 public void onSuccess() {
                     progressBar.setVisibility( View.GONE );
