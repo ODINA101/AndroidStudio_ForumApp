@@ -207,7 +207,7 @@ public class forumActivity extends AppCompatActivity {
             protected void populateViewHolder(final replyViewHolder viewHolder, final postReplyModel model, int position) {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setContent(model.getContent());
-                viewHolder.setDate(Long.parseLong(model.getDate()));
+                viewHolder.setDate(model.getDate());
                 viewHolder.setPhoto(model.getUid());
 
                 viewHolder.photo.setOnClickListener(new View.OnClickListener() {

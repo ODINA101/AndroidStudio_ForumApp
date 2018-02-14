@@ -8,7 +8,7 @@ public class postReplyModel  {
     public String username;
     public String photo;
     public String content;
-    public String date;
+    public Long date;
     public String uid;
 
     public String getUid() {
@@ -22,7 +22,7 @@ public class postReplyModel  {
         public postReplyModel() {
 
         }
-    public postReplyModel(String uid,String username, String photo, String content, String date) {
+    public postReplyModel(String uid,String username, String photo, String content, Long date) {
         this.username = username;
         this.photo = photo;
         this.content = content;
@@ -55,11 +55,11 @@ public class postReplyModel  {
         this.content = content;
     }
 
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 }
