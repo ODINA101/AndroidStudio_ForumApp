@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -58,6 +59,9 @@ public ProgressBar mProgress;
 
 
 
+        if(getIntent().getExtras().getString("uid").equals(FirebaseAuth.getInstance().getUid())) {
+            follow.setVisibility( View.GONE );
+        }
 
 
 
@@ -94,7 +98,13 @@ public ProgressBar mProgress;
 
                    Log.d("kvanwebii", String.valueOf(dataSnapshot.child(FirebaseAuth.getInstance().getUid())));
                }else{
-                                     follow.setVisibility(View.VISIBLE);
+                    if(getIntent().getExtras().getString("uid").equals(FirebaseAuth.getInstance().getUid())) {
+                        follow.setVisibility( View.GONE );
+                    }else{
+                       follow.setVisibility(View.VISIBLE);
+                    }
+
+
                                    disfollow.setVisibility(View.GONE);
                }
 
@@ -109,10 +119,8 @@ public ProgressBar mProgress;
 
 
 
+        System.out.println("aeeeeeeeee" + getIntent().getExtras().getString("uid") + "sdaasdasdasd" + FirebaseAuth.getInstance().getUid());
 
-        if(uid.equals(FirebaseAuth.getInstance().getUid())) {
-    follow.setVisibility( View.GONE );
-}
 
         follow.setOnClickListener( new View.OnClickListener() {
 
@@ -143,7 +151,7 @@ public ProgressBar mProgress;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("image").getValue().toString() != "default") {
-                    Picasso.with( ProfileInfoActivity.this ).load( dataSnapshot.child("image").getValue().toString() ).placeholder( R.drawable.white ).into( circleImageView, new Callback() {
+                    Picasso.with( ProfileInfoActivity.this ).load( dataSnapshot.child("thumb_image").getValue().toString() ).placeholder( R.drawable.white ).into( circleImageView, new Callback() {
                         @Override
                         public void onSuccess() {
                             mProgress.setVisibility( View.GONE );

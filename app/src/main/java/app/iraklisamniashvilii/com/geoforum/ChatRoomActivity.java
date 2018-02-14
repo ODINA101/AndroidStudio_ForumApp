@@ -94,7 +94,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 TextView titl = mCustomView.findViewById(R.id.userTitle);
                 titl.setText(dataSnapshot.child("name").getValue().toString());
-                Picasso.with(ChatRoomActivity.this).load(dataSnapshot.child("image").getValue().toString()).into((ImageView) mCustomView.findViewById(R.id.mImg), new Callback() {
+                Picasso.with(ChatRoomActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into((ImageView) mCustomView.findViewById(R.id.mImg), new Callback() {
                     @Override
                     public void onSuccess() {
 
