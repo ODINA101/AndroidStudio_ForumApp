@@ -6,6 +6,7 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.os.Bundle;
         import android.os.Debug;
         import android.support.annotation.NonNull;
+        import android.support.design.widget.AppBarLayout;
         import android.support.design.widget.CollapsingToolbarLayout;
         import android.support.design.widget.FloatingActionButton;
         import android.support.design.widget.Snackbar;
@@ -14,12 +15,12 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.support.v7.app.AppCompatActivity;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
-        import android.support.v7.widget.Toolbar;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ProgressBar;
         import android.widget.TextView;
+        import android.support.v7.widget.Toolbar;
 
         import com.firebase.ui.database.FirebaseRecyclerAdapter;
         import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,9 +56,10 @@ public class forumActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.forum_layout2);
+        Toolbar app_bar= (Toolbar) findViewById(R.id.app_bar);
+
+        setSupportActionBar(app_bar);
         recyclerView = findViewById(R.id.myr);
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
@@ -118,8 +120,7 @@ public class forumActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("comments").child(getIntent().getExtras().getString("category")).child(getIntent().getExtras().getString("postTitle"));
 
         recyclerView.setHasFixedSize(true);
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapsingToolbar.setTitle(getIntent().getExtras().getString("postUsername") + "_ს პოსტი");
+        app_bar.setTitle(getIntent().getExtras().getString("postUsername") + "_ს პოსტი");
         FloatingActionButton fabCom = findViewById(R.id.commentBTN);
         fabCom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +131,7 @@ public class forumActivity extends AppCompatActivity {
                 Button publish = view2.findViewById(R.id.publish);
                 Button close = view2.findViewById(R.id.close);
                 TextView name = view2.findViewById(R.id.username);
-                name.setText(getIntent().getExtras().getString("postUsername") + "_ის პოსტზე პასუხი");
+
                 builder.setView(view2);
                 final AlertDialog dialog = builder.create();
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
@@ -185,14 +186,7 @@ public class forumActivity extends AppCompatActivity {
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
 
         FirebaseRecyclerAdapter<postReplyModel, replyViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<postReplyModel, replyViewHolder>(
@@ -206,9 +200,13 @@ public class forumActivity extends AppCompatActivity {
             protected void populateViewHolder(final replyViewHolder viewHolder, final postReplyModel model, int position) {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setContent(model.getContent());
-                viewHolder.setDate(model.getDate());
-                viewHolder.setPhoto(model.getUid());
 
+                if(model.getDate() != null) {
+                    viewHolder.setDate(model.getDate());
+                }else{
+                    ///////////////
+                }
+                    viewHolder.setPhoto(model.getUid());
                 viewHolder.photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -253,7 +251,7 @@ public class forumActivity extends AppCompatActivity {
         } else if (diff < 50 * MINUTE_MILLIS) {
             return diff / MINUTE_MILLIS + " წუთის წინ";
         } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
+            return "1 საათის წინ";
         } else if (diff < 24 * HOUR_MILLIS) {
             return diff / HOUR_MILLIS + " საათის წინ";
         } else if (diff < 48 * HOUR_MILLIS) {
