@@ -57,9 +57,7 @@ public class forumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forum_layout2);
-        Toolbar app_bar= (Toolbar) findViewById(R.id.app_bar);
-
-        setSupportActionBar(app_bar);
+     
         recyclerView = findViewById(R.id.myr);
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
@@ -120,7 +118,7 @@ public class forumActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("comments").child(getIntent().getExtras().getString("category")).child(getIntent().getExtras().getString("postTitle"));
 
         recyclerView.setHasFixedSize(true);
-        app_bar.setTitle(getIntent().getExtras().getString("postUsername") + "_ს პოსტი");
+
         FloatingActionButton fabCom = findViewById(R.id.commentBTN);
         fabCom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +128,7 @@ public class forumActivity extends AppCompatActivity {
                 final EditText comment = view2.findViewById(R.id.commentTxt);
                 Button publish = view2.findViewById(R.id.publish);
                 Button close = view2.findViewById(R.id.close);
-                TextView name = view2.findViewById(R.id.username);
+
 
                 builder.setView(view2);
                 final AlertDialog dialog = builder.create();
@@ -227,39 +225,7 @@ public class forumActivity extends AppCompatActivity {
 
     }
 
-    private static final int SECOND_MILLIS = 1000;
-    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
 
-
-    public static String getTimeAgo(long time, Context ctx) {
-        if (time < 1000000000000L) {
-            // if timestamp given in seconds, convert to millis
-            time *= 1000;
-        }
-
-        long now = System.currentTimeMillis();
-
-
-        // TODO: localize
-        final long diff = now - time;
-        if (diff < MINUTE_MILLIS) {
-            return "ახლახანს";
-        } else if (diff < 2 * MINUTE_MILLIS) {
-            return "რამდენიმე წუთის წინ";
-        } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " წუთის წინ";
-        } else if (diff < 90 * MINUTE_MILLIS) {
-            return "1 საათის წინ";
-        } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " საათის წინ";
-        } else if (diff < 48 * HOUR_MILLIS) {
-            return "გუშინ";
-        } else {
-            return diff / DAY_MILLIS + " დღის წინ";
-        }
-    }
     public static class replyViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView photo;
         public TextView username;
@@ -284,7 +250,7 @@ public class forumActivity extends AppCompatActivity {
 
 
 
-            date.setText(getTimeAgo(dat,itemView.getContext()));
+            date.setText(new timeago().gettimeago(dat,itemView.getContext()));
 
 
 

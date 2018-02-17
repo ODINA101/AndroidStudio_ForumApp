@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:layout_editor_absoluteY="81dp">
 
     <android.support.v7.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginTop="8dp"
         app:cardElevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +76,7 @@
                     android:layout_gravity="top|right|end"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginStart="100dp"
+                    android:layout_marginStart="80dp"
                     android:layout_marginTop="8dp"
                     android:text="1min ago" />
             </LinearLayout>
@@ -87,10 +88,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
 
+                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                android:text="this is a simple paragraph that is meant to be nice and easy to type which is why there will be mommas no periods or any capital letters so i guess this means that it cannot really be considered a paragraph but just a series of run on sentences this should help you get faster at typing as im trying not to use too many difficult words in it although i think that i might start making it hard by including some more difficult letters I'm typing pretty quickly so forgive me for any mistakes i think that i will not just tell you a story about the time i went to the zoo and found a monkey and a fox playing together they"
+                android:text="test"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
                 app:layout_constraintVertical_bias="0.25" />
@@ -104,7 +107,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.03"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +117,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -125,7 +128,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_reply_content"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="1.0">
 
                 <com.like.LikeButton
                     android:id="@+id/star_button"
@@ -137,8 +140,9 @@
                 <android.support.v7.widget.AppCompatButton
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="25dp"
 
+
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/ic_mode_comment_black_24dp" />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

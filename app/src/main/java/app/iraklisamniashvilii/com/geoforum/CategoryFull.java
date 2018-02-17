@@ -165,8 +165,8 @@ public class CategoryFull extends AppCompatActivity {
 
         }
 
-        void setdate(String data) {
-            date.setText( data );
+        void setdate(Long data) {
+            date.setText( new timeago().gettimeago(data,itemView.getContext()) );
         }
 
         void setProfile_image(String profile) {

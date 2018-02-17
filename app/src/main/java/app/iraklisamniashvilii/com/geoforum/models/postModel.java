@@ -7,7 +7,7 @@ package app.iraklisamniashvilii.com.geoforum.models;
 public class postModel {
     public String title;
     public String des;
-    public String date;
+    public  Long date;
     public String uid;
     public String name;
 
@@ -22,7 +22,7 @@ public class postModel {
     public postModel() {
     }
 
-    public postModel(String title, String des, String date, String uid,String name) {
+    public postModel(String title, String des,Long date, String uid,String name) {
         this.title = title;
         this.des = des;
         this.date = date;
@@ -45,11 +45,11 @@ public class postModel {
         this.des = des;
     }
 
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
