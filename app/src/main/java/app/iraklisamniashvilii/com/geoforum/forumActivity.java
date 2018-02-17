@@ -5,6 +5,7 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.content.Intent;
         import android.os.Bundle;
         import android.os.Debug;
+        import android.os.Parcelable;
         import android.support.annotation.NonNull;
         import android.support.design.widget.AppBarLayout;
         import android.support.design.widget.CollapsingToolbarLayout;
@@ -195,7 +196,7 @@ public class forumActivity extends AppCompatActivity {
 
         ) {
             @Override
-            protected void populateViewHolder(final replyViewHolder viewHolder, final postReplyModel model, int position) {
+            protected void populateViewHolder(final replyViewHolder viewHolder, final postReplyModel model, final int position) {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setContent(model.getContent());
 
@@ -217,6 +218,18 @@ public class forumActivity extends AppCompatActivity {
                         startActivity(profileInfo, optionsCompat.toBundle());
                     }
                 });
+
+               viewHolder.replyBTN.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+       Intent commentSection = new Intent(forumActivity.this,commentsActivity.class);
+
+       commentSection.putExtra("ref", getRef(position).getKey());
+       startActivity(commentSection);
+                   }
+               });
+
+
             }
         };
 
@@ -233,7 +246,7 @@ public class forumActivity extends AppCompatActivity {
         public TextView date;
         public TextView content;
         public View mView;
-
+        public Button replyBTN;
         public replyViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -242,6 +255,8 @@ public class forumActivity extends AppCompatActivity {
             progressBar = mView.findViewById(R.id.progressBar3);
             date = mView.findViewById(R.id.post_reply_time);
             content = mView.findViewById(R.id.post_reply_content);
+            replyBTN = mView.findViewById(R.id.replyBTN);
+
 
 
         }

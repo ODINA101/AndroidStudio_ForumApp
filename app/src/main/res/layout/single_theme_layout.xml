@@ -19,7 +19,8 @@
         app:contentPadding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="17dp">
+        tools:layout_editor_absoluteY="17dp"
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/img_icon"

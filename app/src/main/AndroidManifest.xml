@@ -54,10 +54,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProfileInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:theme="@style/AppTheme.NoActionBar" android:name=".ChatRoomActivity" />
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ChatRoomActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".commentsActivity"></activity>
     </application>
 
 </manifest>
