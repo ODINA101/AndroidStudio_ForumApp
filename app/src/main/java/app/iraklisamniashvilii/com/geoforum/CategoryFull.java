@@ -94,7 +94,7 @@ public class CategoryFull extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent postInfo = new Intent( getApplicationContext(), forumActivity.class );
-                        postInfo.putExtra( "postTitle",model.getTitle() );
+                        postInfo.putExtra( "postTitle",mDatabase.getKey() );
                         postInfo.putExtra( "postUser",model.getUid() );
                         postInfo.putExtra( "postContent",model.getDes() );
 

@@ -51,39 +51,39 @@ private EditText editText;
         imageButton = findViewById(R.id.imageButton);
         editText = findViewById(R.id.editText);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("replycomments").child("-L5PPLBC66MEqcRsQEWf");
-//getIntent().getExtras().getString("ref")
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("replycomments").child(getIntent().getExtras().getString("ref"));
 
-        //////////////////////////////////////////////
-//        imageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//             public void onClick(View v) {
-//                HashMap<String,String> mMap = new HashMap<>();
-//                mMap.put("uid", FirebaseAuth.getInstance().getUid());
-//                mMap.put("content",editText.getText().toString());
-//
-//
-//                mDatabase.setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        editText.setText(null);
-//                    }
-//                });
-//
-//                mDatabase.child("date").setValue(ServerValue.TIMESTAMP);
-//
-//            }
-//        });
+
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+              public void onClick(View v) {
+                 HashMap<String,String> mMap = new HashMap<>();
+                 mMap.put("uid", FirebaseAuth.getInstance().getUid());
+                 mMap.put("content",editText.getText().toString());
+                String key = mDatabase.push().getKey();
+
+               mDatabase.child(key).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                   @Override
+                   public void onComplete(@NonNull Task<Void> task) {
+                        editText.setText(null);
+                    }
+                });
+
+                mDatabase.child(key).child("date").setValue(ServerValue.TIMESTAMP);
+
+           }
+        });
 
 
             recyclerView =  findViewById(R.id.comments_recycler);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        FirebaseRecyclerAdapter<ReplycommentsModel,commentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ReplycommentsModel, commentViewHolder>(
+        final FirebaseRecyclerAdapter<ReplycommentsModel,commentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ReplycommentsModel, commentViewHolder>(
                 ReplycommentsModel.class,
                 R.layout.single_reply_comment,
                 commentViewHolder.class,
@@ -94,29 +94,29 @@ private EditText editText;
             @Override
             protected void populateViewHolder(final commentViewHolder viewHolder, ReplycommentsModel model, int position) {
 
-//                  viewHolder.setDate(model.getDate());
-//                   viewHolder.setContent(model.getContent());
+                  viewHolder.setDate(model.getDate());
+                    viewHolder.setContent(model.getContent());
 
-//                      FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
-//                          @Override
-//                          public void onDataChange(DataSnapshot dataSnapshot) {
-//                               System.out.print(dataSnapshot.child("name").getValue());
-//
-//                              System.out.print(dataSnapshot);
-//                              System.out.print(dataSnapshot);
-//                              System.out.print(dataSnapshot);
-//                              System.out.print(dataSnapshot);
-//
-//                             // viewHolder.uname.setText(dataSnapshot.child("name").getValue().toString());
-//                              //viewHolder.setPhoto(dataSnapshot.child("thumb_image").getValue().toString());
-//
-//                          }
-//
-//                          @Override
-//                          public void onCancelled(DatabaseError databaseError) {
-//
-//                          }
-//                      });
+                       FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
+                          @Override
+                          public void onDataChange(DataSnapshot dataSnapshot) {
+                                System.out.print(dataSnapshot.child("name").getValue());
+
+                             System.out.print(dataSnapshot);
+                             System.out.print(dataSnapshot);
+                              System.out.print(dataSnapshot);
+                             System.out.print(dataSnapshot);
+
+                           viewHolder.uname.setText(dataSnapshot.child("name").getValue().toString());
+                              viewHolder.setPhoto(dataSnapshot.child("thumb_image").getValue().toString());
+
+                          }
+
+                        @Override
+                           public void onCancelled(DatabaseError databaseError) {
+
+                          }
+                      });
 
 
             }
@@ -124,7 +124,17 @@ private EditText editText;
 
 recyclerView.setAdapter(firebaseRecyclerAdapter);
 
+mDatabase.addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        linearLayoutManager.scrollToPositionWithOffset(firebaseRecyclerAdapter.getItemCount() -1,0);
+    }
 
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
+    }
+});
 
 
 
@@ -151,7 +161,10 @@ recyclerView.setAdapter(firebaseRecyclerAdapter);
 
 
         public void setDate(Long data)  {
+            if(data != null ){
+
             time.setText( new timeago().gettimeago(data,itemView.getContext()) );
+            }
 
 
         }
