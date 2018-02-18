@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +51,8 @@ public class NotificationsActivity extends Fragment{
         ) {
             @Override
             protected void populateViewHolder(NotiViewHolder viewHolder, NotiModel model, int position) {
+                  viewHolder.seAction(model.getContent());
+                  viewHolder.seTime(model.getDate());
 
             }
         };
@@ -64,15 +67,34 @@ recyclerView.setLayoutManager(linearLayoutManager);
 
 
     public static class NotiViewHolder extends RecyclerView.ViewHolder {
+private TextView content;
+private TextView dattime;
+
 
         public NotiViewHolder(View itemView) {
             super(itemView);
+
+            content = itemView.findViewById(R.id.content);
+            dattime = itemView.findViewById(R.id.dattime);
+
         }
+
+
+
+
+
 
         public void seAction(String con) {
 
+            content.setText(con);
+
+
+
         }
-        public void seTime(Long data) {
+        public void seTime(Long dat) {
+            dattime.setText(new timeago().gettimeago(dat,itemView.getContext()));
+
+
 
         }
 

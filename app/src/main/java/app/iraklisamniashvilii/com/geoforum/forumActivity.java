@@ -160,7 +160,20 @@ public class forumActivity extends AppCompatActivity {
                                String ke = mDatabase.push().getKey();
 
 
-                                        mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                               HashMap<String,String> mymap = new HashMap<>();
+                               mymap.put("content",dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პოსტზე");
+
+
+
+
+                               FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+
+                                FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+
+
+
+                                mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                     }

@@ -6,11 +6,21 @@ package app.iraklisamniashvilii.com.geoforum.models;
 
 public class NotiModel {
     String content;
-    String uid;
+    Long date;
 
-    public NotiModel(String content, String uid) {
+
+    public NotiModel() {}
+    public NotiModel(String content, Long date) {
         this.content = content;
-        this.uid = uid;
+        this.date = date;
+    }
+
+    public Long getDate() {
+        return date;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
     }
 
     public String getContent() {
@@ -21,11 +31,4 @@ public class NotiModel {
         this.content = content;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 }
