@@ -53,7 +53,40 @@ private EditText editText;
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("replycomments").child(getIntent().getExtras().getString("ref"));
 
+final String posterUid = getIntent().getStringExtra("posterUid");
 
+
+
+/////////////
+        final String ke = mDatabase.push().getKey();
+
+
+        final HashMap<String,String> mymap = new HashMap<>();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mymap.put("content",dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პასუხზე");
+
+                FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
+
+                FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+        /////////////
 
         imageButton.setOnClickListener(new View.OnClickListener() {
              @Override

@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -70,16 +71,20 @@ public EditText shortDes;
              @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy.MMM.dd");
              final HashMap<String,String> map = new HashMap<>();
              map.put( "title",postTitle.getText().toString());
-             map.put("date", df.format(c.getTime()));
              map.put("uid", uid );
 
              FirebaseDatabase.getInstance().getReference().child( "Users" ).child( uid ).addListenerForSingleValueEvent( new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+
                      map.put("name",dataSnapshot.child("name").getValue().toString());
                      avLoadingIndicatorView.setVisibility( View.GONE );
                      map.put("des",shortDes.getText().toString());
-                     mDatabase.push().setValue( map );
+                     mDatabase.push().child(mDatabase.push().getKey()).setValue( map );
+                     mDatabase.push().child(mDatabase.push().getKey()).setValue(ServerValue.TIMESTAMP);
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

@@ -86,7 +86,7 @@ public class CategoryFull extends AppCompatActivity {
 
 
             @Override
-            protected void populateViewHolder(final postviewholder viewHolder, final postModel model, int position) {
+            protected void populateViewHolder(final postviewholder viewHolder, final postModel model, final int position) {
                 viewHolder.settitle( model.getTitle() );
                 viewHolder.setdate( model.getDate() );
 
@@ -94,7 +94,7 @@ public class CategoryFull extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent postInfo = new Intent( getApplicationContext(), forumActivity.class );
-                        postInfo.putExtra( "postTitle",mDatabase.getKey() );
+                        postInfo.putExtra( "postTitle",getRef(position).getKey());
                         postInfo.putExtra( "postUser",model.getUid() );
                         postInfo.putExtra( "postContent",model.getDes() );
 

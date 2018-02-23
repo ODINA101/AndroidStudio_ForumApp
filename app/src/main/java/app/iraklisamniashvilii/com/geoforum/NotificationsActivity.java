@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -23,6 +24,7 @@ public class NotificationsActivity extends Fragment{
 
     private RecyclerView recyclerView;
    private DatabaseReference databaseReference;
+   private Button cleanNoti;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,7 +35,13 @@ public class NotificationsActivity extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.mRecy);
           databaseReference = FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid());
-
+        cleanNoti = view.findViewById(R.id.cleanNoti);
+        cleanNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.getRef().removeValue();
+            }
+        });
 
 
         super.onViewCreated( view, savedInstanceState );

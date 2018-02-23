@@ -34,6 +34,8 @@ package app.iraklisamniashvilii.com.geoforum;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ServerValue;
         import com.google.firebase.database.ValueEventListener;
+        import com.like.LikeButton;
+        import com.like.OnLikeListener;
         import com.squareup.picasso.Callback;
         import com.squareup.picasso.Picasso;
 
@@ -213,6 +215,103 @@ public class forumActivity extends AppCompatActivity {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setContent(model.getContent());
 
+
+
+                FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
+                        .child(getIntent().getExtras().getString("postTitle"))
+                        .child(getRef(position).getKey()).child("likes").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+if(dataSnapshot.exists()) {
+viewHolder.LikeNum(dataSnapshot.getChildrenCount());
+}
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                FirebaseDatabase.getInstance().getReference().child("likes").
+                        child(getIntent().getExtras().getString("category")).
+                        child(getIntent().getExtras().getString("postTitle")).child(getRef(position).getKey()).child("likes").orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                   if(dataSnapshot.getChildrenCount() > 0) {
+viewHolder.LikedOrNot(true);
+                   }else{
+                       viewHolder.LikedOrNot(false);
+
+                   }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                final String rf = getRef(position).getKey();
+
+                viewHolder.like_btn.setOnLikeListener(new OnLikeListener() {
+                   @Override
+                   public void liked(LikeButton likeButton) {
+                       HashMap<String,String> mmmap = new HashMap<>();
+                       mmmap.put("uid",FirebaseAuth.getInstance().getUid());
+                       FirebaseDatabase.getInstance().getReference().child("likes").
+                               child(getIntent().getExtras().getString("category")).
+                               child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).setValue(mmmap);
+                                System.out.print("likedddddddxd");
+                       FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
+                               .child(getIntent().getExtras().getString("postTitle"))
+                               .child(rf).child("likes").addValueEventListener(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(DataSnapshot dataSnapshot) {
+                               if(dataSnapshot.exists()) {
+                                   viewHolder.LikeNum(dataSnapshot.getChildrenCount());
+                               }
+
+
+                           }
+
+                           @Override
+                           public void onCancelled(DatabaseError databaseError) {
+
+                           }
+                       });
+                   }
+
+                   @Override
+                   public void unLiked(LikeButton likeButton) {
+                       FirebaseDatabase.getInstance().getReference().child("likes").
+                               child(getIntent().getExtras().getString("category")).
+                               child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).removeValue();
+
+                       FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
+                               .child(getIntent().getExtras().getString("postTitle"))
+                               .child(rf).child("likes").addValueEventListener(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(DataSnapshot dataSnapshot) {
+                               if(dataSnapshot.exists()) {
+                                   viewHolder.LikeNum(dataSnapshot.getChildrenCount());
+                               }
+
+
+                           }
+
+                           @Override
+                           public void onCancelled(DatabaseError databaseError) {
+
+                           }
+                       });
+                  }
+               });
+
+
                 if(model.getDate() != null) {
                     viewHolder.setDate(model.getDate());
                 }else{
@@ -238,6 +337,7 @@ public class forumActivity extends AppCompatActivity {
        Intent commentSection = new Intent(forumActivity.this,commentsActivity.class);
 
        commentSection.putExtra("ref", getRef(position).getKey());
+       commentSection.putExtra("posterUid",model.getUid());
        startActivity(commentSection);
                    }
                });
@@ -260,6 +360,8 @@ public class forumActivity extends AppCompatActivity {
         public TextView content;
         public View mView;
         public Button replyBTN;
+        public LikeButton like_btn;
+        public TextView likesNum;
         public replyViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -269,6 +371,8 @@ public class forumActivity extends AppCompatActivity {
             date = mView.findViewById(R.id.post_reply_time);
             content = mView.findViewById(R.id.post_reply_content);
             replyBTN = mView.findViewById(R.id.replyBTN);
+            like_btn = mView.findViewById(R.id.like_btn);
+            likesNum = mView.findViewById(R.id.likesNum);
 
 
 
@@ -284,10 +388,19 @@ public class forumActivity extends AppCompatActivity {
 
         }
 
+
+
         public void setContent(String cont) {
             content.setText(cont);
         }
 
+
+        public void LikedOrNot(Boolean like) {
+            like_btn.setLiked(like);
+        }
+        public void LikeNum(Long nm) {
+            likesNum.setText(nm.toString());
+        }
 
         public void setUsername(String name) {
             username.setText(name);
