@@ -3,6 +3,7 @@ package app.iraklisamniashvilii.com.geoforum;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -19,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.squareup.picasso.Picasso;
 
 import app.iraklisamniashvilii.com.geoforum.fragments.Logout;
@@ -44,44 +48,45 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_home );
-        Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
-        setSupportActionBar( toolbar );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        navigationView = (NavigationView) findViewById( R.id.nav_view );
-        navigationView.setNavigationItemSelectedListener( this );
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         Fragment mtavari = new homeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.drawer_content,mtavari);
+        ft.replace(R.id.drawer_content, mtavari);
         ft.commit();
         String currentUid = mCurrentUser.getUid();
         mUserData = FirebaseDatabase.getInstance().getReference("Users").child(currentUid);
         mDisplayImage = navigationView.getHeaderView(0).findViewById(R.id.drawer_profile_photo);
         header_progress = navigationView.getHeaderView(0).findViewById(R.id.header_progress);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
-        drawer.addDrawerListener( toggle );
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mUserData.addValueEventListener( new ValueEventListener() {
+
+        mUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.child( "thumb_image" ).getValue());
+                System.out.println(dataSnapshot.child("thumb_image").getValue());
 
                 System.out.println("aeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                if(dataSnapshot.child( "thumb_image" ).getValue().equals("default")) {
-                    Picasso.with( HomeActivity.this ).load(R.drawable.user).into(  mDisplayImage);
+                if (dataSnapshot.child("thumb_image").getValue().equals("default")) {
+                    Picasso.with(HomeActivity.this).load(R.drawable.user).into(mDisplayImage);
                     header_progress.setVisibility(View.GONE);
 
-                }else{
+                } else {
 
-                    Picasso.with(HomeActivity.this).load(dataSnapshot.child( "thumb_image" ).getValue().toString()).placeholder(R.drawable.white).into(mDisplayImage,new com.squareup.picasso.Callback() {
+                    Picasso.with(HomeActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(mDisplayImage, new com.squareup.picasso.Callback() {
 
                         @Override
                         public void onSuccess() {
@@ -104,8 +109,13 @@ public class HomeActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        } );
+        });
 
+    }
+
+    private void setMenuCounter(@IdRes int itemId, int count) {
+        TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView();
+        view.setText(count > 0 ? String.valueOf(count) : null);
     }
 
 
@@ -113,9 +123,9 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        if (drawer.isDrawerOpen( GravityCompat.START )) {
-            drawer.closeDrawer( GravityCompat.START );
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -124,9 +134,33 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.home, menu );
+        getMenuInflater().inflate(R.menu.home, menu);
+
+
+   FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid()).orderByChild("seen").equalTo("false").addValueEventListener(new ValueEventListener() {
+       @Override
+       public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+               setMenuCounter(R.id.nav_notifications, (int) dataSnapshot.getChildrenCount());
+
+       }
+
+       @Override
+       public void onCancelled(DatabaseError databaseError) {
+
+       }
+   });
+
+
+
+
+
+
+
         return true;
-    }
+}
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,6 +173,8 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+
+
 
         return super.onOptionsItemSelected( item );
     }

@@ -105,11 +105,11 @@ public class CategoryFull extends AppCompatActivity {
 
                     }
                 } );
-                FirebaseDatabase.getInstance().getReference().child( "Users" ).child( model.getUid() ).addListenerForSingleValueEvent( new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child( "Users" ).child( model.getUid() ).addValueEventListener( new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (!dataSnapshot.child( "thumb_image" ).equals( "default" )) {
+                        if(!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
                             viewHolder.setProfile_image( dataSnapshot.child( "thumb_image" ).getValue().toString() );
                             findViewById( R.id.aviLoader ).setVisibility( View.GONE );
 

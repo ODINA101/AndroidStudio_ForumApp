@@ -112,7 +112,7 @@ CircleImageView circleImageView;
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     name.setText(dataSnapshot.child("name").getValue().toString());
 
-                    if(!dataSnapshot.child("thumb_image").equals("default")) {
+                    if(!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
                     Picasso.with(mview.getContext()).load(dataSnapshot.child("thumb_image").getValue().toString()).into(circleImageView, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -125,18 +125,9 @@ CircleImageView circleImageView;
                         }
                     });
                     }else{
-                        Picasso.with(mview.getContext()).load(R.drawable.user).into(circleImageView, new Callback() {
+                        Picasso.with(mview.getContext()).load(R.drawable.user).into(circleImageView);
+                        progressBari.setVisibility(View.GONE);
 
-                            @Override
-                            public void onSuccess() {
-                                progressBari.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
                     }
                 }
 

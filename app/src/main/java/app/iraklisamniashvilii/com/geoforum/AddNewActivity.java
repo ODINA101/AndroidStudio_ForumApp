@@ -65,10 +65,7 @@ public EditText shortDes;
              avLoadingIndicatorView.animate();
              avLoadingIndicatorView.setVisibility( View.VISIBLE);
 
-             Locale geo = new Locale( "ge","GE","GE" );
-             Calendar c = Calendar.getInstance(geo);
 
-             @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy.MMM.dd");
              final HashMap<String,String> map = new HashMap<>();
              map.put( "title",postTitle.getText().toString());
              map.put("uid", uid );
@@ -76,14 +73,14 @@ public EditText shortDes;
              FirebaseDatabase.getInstance().getReference().child( "Users" ).child( uid ).addListenerForSingleValueEvent( new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
-
+String ke = mDatabase.push().getKey();
 
 
                      map.put("name",dataSnapshot.child("name").getValue().toString());
                      avLoadingIndicatorView.setVisibility( View.GONE );
                      map.put("des",shortDes.getText().toString());
-                     mDatabase.push().child(mDatabase.push().getKey()).setValue( map );
-                     mDatabase.push().child(mDatabase.push().getKey()).setValue(ServerValue.TIMESTAMP);
+                     mDatabase.child(ke).setValue( map );
+                     mDatabase.child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -3,6 +3,7 @@ package app.iraklisamniashvilii.com.geoforum;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
@@ -94,19 +95,27 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 TextView titl = mCustomView.findViewById(R.id.userTitle);
                 titl.setText(dataSnapshot.child("name").getValue().toString());
-                Picasso.with(ChatRoomActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into((ImageView) mCustomView.findViewById(R.id.mImg), new Callback() {
-                    @Override
-                    public void onSuccess() {
+                if(!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
+                    Picasso.with(ChatRoomActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into((ImageView) mCustomView.findViewById(R.id.mImg), new Callback() {
+                        @Override
+                        public void onSuccess() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError() {
+                        @Override
+                        public void onError() {
 
-                    }
-                });
+                        }
+                    });
 
+                }else{
+                                Picasso.with(ChatRoomActivity.this).load(R.drawable.user).placeholder(R.drawable.white).into((ImageView) mCustomView.findViewById(R.id.mImg));
+
+                }
             }
+
+
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -162,6 +171,10 @@ msgRef.addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         linearLayoutManager.scrollToPositionWithOffset(firebaseRecyclerAdapter.getItemCount() - 1, 0);
+
+
+
+
 
     }
 

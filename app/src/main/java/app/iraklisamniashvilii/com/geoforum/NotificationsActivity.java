@@ -14,9 +14,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import app.iraklisamniashvilii.com.geoforum.models.NotiModel;
 
@@ -42,6 +46,34 @@ public class NotificationsActivity extends Fragment{
                 databaseReference.getRef().removeValue();
             }
         });
+
+
+
+
+
+        FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid()).orderByChild("seen").equalTo("false").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                  FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid())
+                            .child(snapshot.getKey()).child("seen").setValue("true");
+
+
+
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         super.onViewCreated( view, savedInstanceState );

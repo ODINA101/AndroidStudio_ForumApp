@@ -3,6 +3,7 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.annotation.SuppressLint;
         import android.content.Context;
         import android.content.Intent;
+        import android.net.Uri;
         import android.os.Bundle;
         import android.os.Debug;
         import android.os.Parcelable;
@@ -164,6 +165,7 @@ public class forumActivity extends AppCompatActivity {
 
                                HashMap<String,String> mymap = new HashMap<>();
                                mymap.put("content",dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პოსტზე");
+                                mymap.put("seen","false");
 
 
 
@@ -223,7 +225,9 @@ public class forumActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 if(dataSnapshot.exists()) {
-viewHolder.LikeNum(dataSnapshot.getChildrenCount());
+viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
+}else{
+    viewHolder.LikeNum("");
 }
 
 
@@ -235,13 +239,39 @@ viewHolder.LikeNum(dataSnapshot.getChildrenCount());
                     }
                 });
 
+
+
+
+
+                FirebaseDatabase.getInstance().getReference().child("replycomments").child(getRef(position).getKey()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.exists()) {
+                            viewHolder.SetcommentsNum(Long.toString(dataSnapshot.getChildrenCount()));
+                        }else{
+                            viewHolder.SetcommentsNum("");
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
                 FirebaseDatabase.getInstance().getReference().child("likes").
                         child(getIntent().getExtras().getString("category")).
-                        child(getIntent().getExtras().getString("postTitle")).child(getRef(position).getKey()).child("likes").orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                        child(getIntent().getExtras().getString("postTitle"))
+                        .child(getRef(position).getKey()).child("likes")
+                        .orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                    if(dataSnapshot.getChildrenCount() > 0) {
-viewHolder.LikedOrNot(true);
+            viewHolder.LikedOrNot(true);
                    }else{
                        viewHolder.LikedOrNot(false);
 
@@ -266,6 +296,40 @@ viewHolder.LikedOrNot(true);
                                child(getIntent().getExtras().getString("category")).
                                child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).setValue(mmmap);
                                 System.out.print("likedddddddxd");
+                       final String uid = FirebaseAuth.getInstance().getUid();
+
+                       if(!getIntent().getExtras().getString("postUser").equals(uid)) {
+
+
+                           FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                               @Override
+                               public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                   String ke = mDatabase.push().getKey();
+
+
+                                   HashMap<String, String> mymap = new HashMap<>();
+                                   mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ მოიწონა თქვენი კომენტარი");
+                                   mymap.put("seen","false");
+
+
+                                   FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+
+                                   FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+
+                               }
+
+
+                               @Override
+                               public void onCancelled(DatabaseError databaseError) {
+
+                               }
+                           });
+
+
+                       }
+
 
                    }
 
@@ -330,6 +394,7 @@ viewHolder.LikedOrNot(true);
         public Button replyBTN;
         public LikeButton like_btn;
         public TextView likesNum;
+        public TextView commentsNum;
         public replyViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -341,6 +406,7 @@ viewHolder.LikedOrNot(true);
             replyBTN = mView.findViewById(R.id.replyBTN);
             like_btn = mView.findViewById(R.id.like_btn);
             likesNum = mView.findViewById(R.id.likesNum);
+            commentsNum = mView.findViewById(R.id.commentsNum);
 
 
 
@@ -361,13 +427,15 @@ viewHolder.LikedOrNot(true);
         public void setContent(String cont) {
             content.setText(cont);
         }
-
+         public void SetcommentsNum(String num) {
+             commentsNum.setText(num);
+         }
 
         public void LikedOrNot(Boolean like) {
             like_btn.setLiked(like);
         }
-        public void LikeNum(Long nm) {
-            likesNum.setText(nm.toString());
+        public void LikeNum(String nm) {
+            likesNum.setText(nm);
         }
 
         public void setUsername(String name) {
