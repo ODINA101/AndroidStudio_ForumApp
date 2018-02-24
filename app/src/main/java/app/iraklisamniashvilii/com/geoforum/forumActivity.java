@@ -266,23 +266,7 @@ viewHolder.LikedOrNot(true);
                                child(getIntent().getExtras().getString("category")).
                                child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).setValue(mmmap);
                                 System.out.print("likedddddddxd");
-                       FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
-                               .child(getIntent().getExtras().getString("postTitle"))
-                               .child(rf).child("likes").addValueEventListener(new ValueEventListener() {
-                           @Override
-                           public void onDataChange(DataSnapshot dataSnapshot) {
-                               if(dataSnapshot.exists()) {
-                                   viewHolder.LikeNum(dataSnapshot.getChildrenCount());
-                               }
 
-
-                           }
-
-                           @Override
-                           public void onCancelled(DatabaseError databaseError) {
-
-                           }
-                       });
                    }
 
                    @Override
@@ -291,23 +275,7 @@ viewHolder.LikedOrNot(true);
                                child(getIntent().getExtras().getString("category")).
                                child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).removeValue();
 
-                       FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
-                               .child(getIntent().getExtras().getString("postTitle"))
-                               .child(rf).child("likes").addValueEventListener(new ValueEventListener() {
-                           @Override
-                           public void onDataChange(DataSnapshot dataSnapshot) {
-                               if(dataSnapshot.exists()) {
-                                   viewHolder.LikeNum(dataSnapshot.getChildrenCount());
-                               }
 
-
-                           }
-
-                           @Override
-                           public void onCancelled(DatabaseError databaseError) {
-
-                           }
-                       });
                   }
                });
 
