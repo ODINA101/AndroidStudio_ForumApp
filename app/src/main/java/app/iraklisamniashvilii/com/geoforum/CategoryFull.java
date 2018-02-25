@@ -36,63 +36,47 @@ public class CategoryFull extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_category_full );
-        backBtn = findViewById( R.id.cat_back );
-        recyclerView = findViewById( R.id.mrecycler );
-        mLayout = new LinearLayoutManager( this );
-        mLayout.setStackFromEnd( true );
-        mLayout.setReverseLayout( true );
-        recyclerView.setLayoutManager( mLayout );
-        backBtn.setOnClickListener( new View.OnClickListener() {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_category_full);
+        backBtn = findViewById(R.id.cat_back);
+        recyclerView = findViewById(R.id.mrecycler);
+        mLayout = new LinearLayoutManager(this);
+        mLayout.setStackFromEnd(true);
+        mLayout.setReverseLayout(true);
+        recyclerView.setLayoutManager(mLayout);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
-        } );
+        });
         loadmore();
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById( R.id.fab );
-        fab.setOnClickListener( new View.OnClickListener() {
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Intent Addintent = new Intent( CategoryFull.this, AddNewActivity.class );
-              Addintent.putExtra( "title", getIntent().getExtras().getString( "title" ) );
-            startActivity( Addintent );
+                Intent Addintent = new Intent(CategoryFull.this, AddNewActivity.class);
+                Addintent.putExtra("title", getIntent().getExtras().getString("title"));
+                startActivity(Addintent);
 
 
             }
-        } );
-        title = findViewById( R.id.cat_full_title );
-        title.setText( getIntent().getExtras().getString( "title" ) );
+        });
+        title = findViewById(R.id.cat_full_title);
+        title.setText(getIntent().getExtras().getString("title"));
 
 
         /////////////////////////
 
     }
+
     /////////////////////////created//////////////////////
 
     public void loadmore() {
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child( "Posts" ).child( getIntent().getExtras().getString( "title" ) );
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) {
-                    findViewById( R.id.aviLoader ).setVisibility( View.GONE );
-                    findViewById(R.id.gaxd).setVisibility(View.VISIBLE);
-                }else{
-                    findViewById(R.id.gaxd).setVisibility(View.GONE);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Posts").child(getIntent().getExtras().getString("title"));
 
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         FirebaseRecyclerAdapter<postModel, postviewholder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<postModel, postviewholder>(
                 postModel.class,
@@ -106,38 +90,37 @@ public class CategoryFull extends AppCompatActivity {
 
             @Override
             protected void populateViewHolder(final postviewholder viewHolder, final postModel model, final int position) {
-                viewHolder.settitle( model.getTitle() );
-                viewHolder.setdate( model.getDate() );
+                viewHolder.settitle(model.getTitle());
+                viewHolder.setdate(model.getDate());
 
-
-                viewHolder.cardView.setOnClickListener( new View.OnClickListener() {
+                viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent postInfo = new Intent( getApplicationContext(), forumActivity.class );
-                        postInfo.putExtra( "postTitle",getRef(position).getKey());
-                        postInfo.putExtra( "postUser",model.getUid() );
-                        postInfo.putExtra( "postContent",model.getDes() );
+                        Intent postInfo = new Intent(getApplicationContext(), forumActivity.class);
+                        postInfo.putExtra("postTitle", getRef(position).getKey());
+                        postInfo.putExtra("postUser", model.getUid());
+                        postInfo.putExtra("postContent", model.getDes());
 
-                        postInfo.putExtra( "postUsername",model.getName() );
-                        postInfo.putExtra( "category",getIntent().getExtras().getString( "title" ) );
-                    startActivity( postInfo );
+                        postInfo.putExtra("postUsername", model.getName());
+                        postInfo.putExtra("category", getIntent().getExtras().getString("title"));
+                        startActivity(postInfo);
 
 
                     }
-                } );
-                FirebaseDatabase.getInstance().getReference().child( "Users" ).child( model.getUid() ).addValueEventListener( new ValueEventListener() {
+                });
+                FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if(!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
-                            viewHolder.setProfile_image( dataSnapshot.child( "thumb_image" ).getValue().toString() );
-                            findViewById( R.id.aviLoader ).setVisibility( View.GONE );
+                        if (!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
+                            viewHolder.setProfile_image(dataSnapshot.child("thumb_image").getValue().toString());
+                            findViewById(R.id.aviLoader).setVisibility(View.GONE);
 
 
                         } else {
 
-                            viewHolder.setProfile_image( "R.drawable.user" );
-                            findViewById( R.id.aviLoader ).setVisibility( View.GONE );
+                            viewHolder.setProfile_image("R.drawable.user");
+                            findViewById(R.id.aviLoader).setVisibility(View.GONE);
 
 
                         }
@@ -147,17 +130,24 @@ public class CategoryFull extends AppCompatActivity {
 
                     public void onCancelled(DatabaseError databaseError) {
                     }
-                } );
+                });
 
 
             }
         };
-        recyclerView.setHasFixedSize( true );
-      recyclerView.setAdapter( firebaseRecyclerAdapter );
+
+
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setAdapter(firebaseRecyclerAdapter);
+
+
+
 
 
 
     }
+
 
 
     public static class postviewholder extends RecyclerView.ViewHolder {
