@@ -100,7 +100,7 @@ public class CategoryFull extends AppCompatActivity {
                         postInfo.putExtra("postTitle", getRef(position).getKey());
                         postInfo.putExtra("postUser", model.getUid());
                         postInfo.putExtra("postContent", model.getDes());
-
+ 
                         postInfo.putExtra("postUsername", model.getName());
                         postInfo.putExtra("category", getIntent().getExtras().getString("title"));
                         startActivity(postInfo);
