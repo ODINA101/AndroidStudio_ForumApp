@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:animateLayoutChanges="true"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/commentTxt"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:ems="10"
+        android:hint="ახალი სახელი"
+        android:inputType="textMultiLine|textPersonName" />
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="დახურვა"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/publish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="შეცვლა"
+        android:textColor="#FFF" />
+</LinearLayout>
+
+</LinearLayout>

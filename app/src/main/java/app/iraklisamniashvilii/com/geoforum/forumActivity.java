@@ -73,16 +73,16 @@ public class forumActivity extends AppCompatActivity {
 
         final CircleImageView mUserPhoto = findViewById(R.id.profile_image);
 
-        TextView post_author = findViewById(R.id.post_author);
+        final TextView post_author = findViewById(R.id.post_author);
         TextView jurika = findViewById(R.id.user_author_content);
 
-        post_author.setText(getIntent().getExtras().getString("postUsername"));
         jurika.setText(getIntent().getExtras().getString("postContent"));
 
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(getIntent().getExtras().getString("postUser")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                post_author.setText(dataSnapshot.child("name").getValue().toString());
 
                 if (!dataSnapshot.child("thumb_image").equals("default")) {
 
@@ -110,7 +110,27 @@ public class forumActivity extends AppCompatActivity {
 
 
                 }
+
+                mUserPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profileInfo = new Intent(forumActivity.this, ProfileInfoActivity.class);
+                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(forumActivity.this, mUserPhoto, "ProfilePhoto");
+
+                        profileInfo.putExtra("name", dataSnapshot.child("name").getValue().toString());
+                        profileInfo.putExtra("uid", getIntent().getExtras().getString("postUser"));
+
+                        startActivity(profileInfo, optionsCompat.toBundle());
+                    }
+                });
+
             }
+
+
+
+
+
+
 
             @Override
 
@@ -159,34 +179,31 @@ public class forumActivity extends AppCompatActivity {
 
 
 
-
-                               String ke = mDatabase.push().getKey();
-
-
-                               HashMap<String,String> mymap = new HashMap<>();
-                               mymap.put("content",dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პოსტზე");
-                                mymap.put("seen","false");
+                                if(!getIntent().getExtras().getString("postUser").equals(uid)) {
+                                    String ke = mDatabase.push().getKey();
 
 
+                                    HashMap<String, String> mymap = new HashMap<>();
+                                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პოსტზე");
+                                    mymap.put("seen", "false");
 
 
-                               FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
-                                FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
-
-
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
-                                mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                    }
-                                });
+                                    mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                        }
+                                    });
 
-                                        mDatabase.child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
-                                dialog.dismiss();
+                                    mDatabase.child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
+                                    dialog.dismiss();
+                                }
                             }
 
                             @Override
@@ -439,7 +456,6 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
         }
 
         public void setUsername(String name) {
-            username.setText(name);
         }
 
         public void setPhoto(String id) {
@@ -450,6 +466,10 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                 public void onDataChange(DataSnapshot dataSnapshot) {
                            Picasso.with(mView.getContext()).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(photo);
                            progressBar.setVisibility(View.GONE);
+
+
+                        username.setText(dataSnapshot.child("name").getValue().toString());
+
                 }
 
                 @Override

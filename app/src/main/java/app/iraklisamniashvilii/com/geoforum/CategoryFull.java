@@ -52,7 +52,6 @@ public class CategoryFull extends AppCompatActivity {
         } );
         loadmore();
 
-
         final FloatingActionButton fab = (FloatingActionButton) findViewById( R.id.fab );
         fab.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -69,11 +68,31 @@ public class CategoryFull extends AppCompatActivity {
 
 
         /////////////////////////
+
     }
     /////////////////////////created//////////////////////
 
     public void loadmore() {
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child( "Posts" ).child( getIntent().getExtras().getString( "title" ) );
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) {
+                    findViewById( R.id.aviLoader ).setVisibility( View.GONE );
+                    findViewById(R.id.gaxd).setVisibility(View.VISIBLE);
+                }else{
+                    findViewById(R.id.gaxd).setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         FirebaseRecyclerAdapter<postModel, postviewholder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<postModel, postviewholder>(
                 postModel.class,
@@ -89,6 +108,7 @@ public class CategoryFull extends AppCompatActivity {
             protected void populateViewHolder(final postviewholder viewHolder, final postModel model, final int position) {
                 viewHolder.settitle( model.getTitle() );
                 viewHolder.setdate( model.getDate() );
+
 
                 viewHolder.cardView.setOnClickListener( new View.OnClickListener() {
                     @Override
@@ -133,8 +153,9 @@ public class CategoryFull extends AppCompatActivity {
             }
         };
         recyclerView.setHasFixedSize( true );
+      recyclerView.setAdapter( firebaseRecyclerAdapter );
 
-        recyclerView.setAdapter( firebaseRecyclerAdapter );
+
 
     }
 

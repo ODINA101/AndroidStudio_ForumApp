@@ -1,5 +1,6 @@
 package app.iraklisamniashvilii.com.geoforum;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -142,6 +145,26 @@ public ProgressBar mProgress;
 
                  me.child("following").child(uid).setValue(mMap);
                  me.child("chats").child(uid).setValue(mMap);
+
+                 String ke =  FirebaseDatabase.getInstance().getReference().child("notifications").push().getKey();
+
+                 HashMap<String,String> mymap = new HashMap<>();
+                 mymap.put("content",getIntent().getExtras().getString( "name" ) + "_მ გამოიწერა თქვენი პროფილი");
+                 mymap.put("seen","false");
+
+
+
+
+                 FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+
+                 FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+
+
+
+
+
+
 
              }
          } );

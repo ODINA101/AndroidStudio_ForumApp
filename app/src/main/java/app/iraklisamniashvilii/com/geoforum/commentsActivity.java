@@ -63,24 +63,28 @@ final String posterUid = getIntent().getStringExtra("posterUid");
 
         final HashMap<String,String> mymap = new HashMap<>();
 
-        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mymap.put("content",dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პასუხზე");
-                mymap.put("seen","false");
 
-                FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
 
-                FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+        if(!posterUid.equals(FirebaseAuth.getInstance().getUid())) {
 
-            }
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პასუხზე");
+                    mymap.put("seen", "false");
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
 
-            }
-        });
+                    FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
 
 

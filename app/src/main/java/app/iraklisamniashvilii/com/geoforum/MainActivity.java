@@ -80,7 +80,7 @@ public FirebaseAuth mAuth;
                             startActivity( home );
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "მოხდა შეცდომა, ელფოსტა ან პაროლი არასწორია",
                                     Toast.LENGTH_SHORT).show();
                         }
 

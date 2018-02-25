@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -115,6 +118,44 @@ public class SettingsActivity extends AppCompatActivity {
 
      }
  } );
+
+
+
+ Button changename = findViewById(R.id.settings_change_name);
+changename.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        View view2 = getLayoutInflater().inflate(R.layout.reply_dialogbox3, null);
+        final EditText comment = view2.findViewById(R.id.commentTxt);
+        Button publish = view2.findViewById(R.id.publish);
+        Button close = view2.findViewById(R.id.close);
+
+
+        builder.setView(view2);
+        final AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String come = comment.getText().toString();
+                final String uid = FirebaseAuth.getInstance().getUid();
+                FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("name").setValue(come);
+                dialog.dismiss();
+
+
+            }
+        });
+
+    }
+});
 
                 profile_photo = findViewById( R.id.setting_change_profile);
                 profile_photo.setOnClickListener( new View.OnClickListener() {
