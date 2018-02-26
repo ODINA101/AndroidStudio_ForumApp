@@ -173,7 +173,7 @@ public ProgressBar mProgress;
         db.addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("image").getValue().toString() != "default") {
+                if(!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
                     Picasso.with( ProfileInfoActivity.this ).load( dataSnapshot.child("thumb_image").getValue().toString() ).placeholder( R.drawable.white ).into( circleImageView, new Callback() {
                         @Override
                         public void onSuccess() {
