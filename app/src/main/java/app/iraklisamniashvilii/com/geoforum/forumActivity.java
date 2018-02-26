@@ -84,7 +84,7 @@ public class forumActivity extends AppCompatActivity {
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 post_author.setText(dataSnapshot.child("name").getValue().toString());
 
-                if (!dataSnapshot.child("thumb_image").equals("default")) {
+                if (!dataSnapshot.child("thumb_image").getValue().toString().equals("default")) {
 
                     progressBar.setVisibility(View.GONE);
                     Picasso.with(forumActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(mUserPhoto, new Callback() {

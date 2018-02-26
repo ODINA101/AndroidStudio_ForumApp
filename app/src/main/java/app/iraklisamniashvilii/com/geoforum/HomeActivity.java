@@ -77,32 +77,28 @@ public class HomeActivity extends AppCompatActivity
         mUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.child("thumb_image").getValue());
+                 if (dataSnapshot.child("thumb_image").getValue().equals("default")) {
+                     Picasso.with(HomeActivity.this).load(R.drawable.user).into(mDisplayImage);
+                     header_progress.setVisibility(View.GONE);
 
-                System.out.println("aeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                if (dataSnapshot.child("thumb_image").getValue().equals("default")) {
-                    Picasso.with(HomeActivity.this).load(R.drawable.user).into(mDisplayImage);
-                    header_progress.setVisibility(View.GONE);
+                 } else {
 
-                } else {
+                     Picasso.with(HomeActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(mDisplayImage, new com.squareup.picasso.Callback() {
 
-                    Picasso.with(HomeActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(mDisplayImage, new com.squareup.picasso.Callback() {
+                         @Override
+                         public void onSuccess() {
+                             header_progress.setVisibility(View.GONE);
 
-                        @Override
-                        public void onSuccess() {
-                            header_progress.setVisibility(View.GONE);
+                         }
 
-                        }
+                         @Override
+                         public void onError() {
 
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
+                         }
+                     });
 
 
-                }
-
+                 }
             }
 
             @Override
