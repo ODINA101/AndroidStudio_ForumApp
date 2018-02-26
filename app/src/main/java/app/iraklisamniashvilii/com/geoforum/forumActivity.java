@@ -105,8 +105,19 @@ public class forumActivity extends AppCompatActivity {
 
                 } else {
 
-                    Picasso.with(forumActivity.this).load(R.drawable.user).into(mUserPhoto);
-                    findViewById(R.id.aviLoader).setVisibility(View.GONE);
+                    Picasso.with(forumActivity.this).load(R.drawable.user).into(mUserPhoto, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+
 
 
                 }
@@ -119,6 +130,7 @@ public class forumActivity extends AppCompatActivity {
 
                         profileInfo.putExtra("name", dataSnapshot.child("name").getValue().toString());
                         profileInfo.putExtra("uid", getIntent().getExtras().getString("postUser"));
+                        profileInfo.putExtra("psUser", getIntent().getExtras().getString("postUser"));
 
                         startActivity(profileInfo, optionsCompat.toBundle());
                     }

@@ -210,20 +210,25 @@ mDatabase.addValueEventListener(new ValueEventListener() {
             content.setText(comment);
 
         }
-        public void setPhoto(String url)  {
-            Picasso.with(mView.getContext()).load(url).into(circleImageView, new Callback() {
-                @Override
-                public void onSuccess() {
+        public void setPhoto(String url) {
+            if (!url.equals("default")) {
+                Picasso.with(mView.getContext()).load(url).into(circleImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
 
 
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+            }else{
+                Picasso.with(mView.getContext()).load(R.drawable.user).into(circleImageView);
 
                 }
 
-                @Override
-                public void onError() {
-
-                }
-            });
         }
 
 

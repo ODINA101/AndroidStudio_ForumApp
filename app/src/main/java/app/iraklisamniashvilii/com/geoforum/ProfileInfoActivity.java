@@ -146,18 +146,28 @@ public ProgressBar mProgress;
                  me.child("following").child(uid).setValue(mMap);
                  me.child("chats").child(uid).setValue(mMap);
 
-                 String ke =  FirebaseDatabase.getInstance().getReference().child("notifications").push().getKey();
+                 final String ke =  FirebaseDatabase.getInstance().getReference().child("notifications").push().getKey();
+FirebaseDatabase.getInstance().getReference().child("Users").addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        HashMap<String,String> mymap = new HashMap<>();
+        mymap.put("content",dataSnapshot.child( "name" ).getValue().toString() + "_მ გამოიწერა თქვენი პროფილი");
+        mymap.put("seen","false");
+        FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
-                 HashMap<String,String> mymap = new HashMap<>();
-                 mymap.put("content",getIntent().getExtras().getString( "name" ) + "_მ გამოიწერა თქვენი პროფილი");
-                 mymap.put("seen","false");
+        FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
 
 
-                 FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+    }
 
-                 FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
+    }
+});
+
 
 
 
@@ -188,7 +198,18 @@ public ProgressBar mProgress;
                         }
                     } );
                 }else{
-                    Picasso.with( ProfileInfoActivity.this ).load( R.drawable.user ).into( circleImageView );
+                    Picasso.with( ProfileInfoActivity.this ).load( R.drawable.user ).into(circleImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            mProgress.setVisibility( View.GONE );
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
                 }
             }
 

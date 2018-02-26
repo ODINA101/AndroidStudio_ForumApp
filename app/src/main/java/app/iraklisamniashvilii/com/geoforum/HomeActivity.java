@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 import app.iraklisamniashvilii.com.geoforum.fragments.Logout;
 import app.iraklisamniashvilii.com.geoforum.fragments.homeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -112,6 +113,7 @@ public class HomeActivity extends AppCompatActivity
     private void setMenuCounter(@IdRes int itemId, int count) {
         TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView();
         view.setText(count > 0 ? String.valueOf(count) : null);
+        if(count < 1) {ShortcutBadger.removeCount(HomeActivity.this);}
     }
 
 
@@ -139,7 +141,7 @@ public class HomeActivity extends AppCompatActivity
 
 
                setMenuCounter(R.id.nav_notifications, (int) dataSnapshot.getChildrenCount());
-
+           ShortcutBadger.applyCount(HomeActivity.this,(int) dataSnapshot.getChildrenCount());
        }
 
        @Override
