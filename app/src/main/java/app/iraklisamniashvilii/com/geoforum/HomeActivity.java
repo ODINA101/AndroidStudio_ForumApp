@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -55,6 +56,11 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        int badgeCount = 1;
+        ShortcutBadger.applyCount(HomeActivity.this, badgeCount); //for 1.1.4+
+
+
+
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -74,10 +80,10 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         mUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("thumb_image").exists()) {
                  if (dataSnapshot.child("thumb_image").getValue().equals("default")) {
                      Picasso.with(HomeActivity.this).load(R.drawable.user).into(mDisplayImage);
                      header_progress.setVisibility(View.GONE);
@@ -98,8 +104,11 @@ public class HomeActivity extends AppCompatActivity
                          }
                      });
 
-
                  }
+                 }else{
+                    header_progress.setVisibility(View.GONE);
+
+                }
             }
 
             @Override

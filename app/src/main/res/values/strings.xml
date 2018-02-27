@@ -112,4 +112,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_forum">forumActivity</string>
+    <string name="regi">რეგისტრაცია</string>
+    <string name="shesv">შესვლა</string>
+    <string name="parol">პაროლი</string>
+    <string name="elpost">ელფოსტა</string>
 </resources>

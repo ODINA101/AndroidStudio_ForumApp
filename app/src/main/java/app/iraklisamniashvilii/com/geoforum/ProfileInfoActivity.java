@@ -151,12 +151,12 @@ FirebaseDatabase.getInstance().getReference().child("Users").addValueEventListen
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         HashMap<String,String> mymap = new HashMap<>();
-        mymap.put("content",dataSnapshot.child( "name" ).getValue().toString() + "_მ გამოიწერა თქვენი პროფილი");
+        mymap.put("content",dataSnapshot.child( "name" ).getValue() + "_მ გამოიწერა თქვენი პროფილი");
         mymap.put("seen","false");
-        FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
-        FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+            FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("uid")).child(ke).setValue(mymap);
 
+            FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("uid")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
 

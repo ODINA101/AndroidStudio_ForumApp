@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/forum"
-    tools:context="app.iraklisamniashvilii.com.geoforum.LoginActivity">
+    tools:context="app.iraklisamniashvilii.com.geoforum.MainActivity">
 
     <EditText
         android:id="@+id/Login_email"

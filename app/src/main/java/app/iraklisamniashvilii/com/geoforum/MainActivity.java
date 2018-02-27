@@ -33,9 +33,9 @@ public FirebaseAuth mAuth;
            if(mAuth.getCurrentUser() != null) {
                sendToStart();
            }
-        setContentView( R.layout.activity_main );
+        setContentView( R.layout.activity_main);
 
-        reg = findViewById( R.id.login_reg );
+        reg = findViewById( R.id.login_reg);
         reg.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,9 +47,9 @@ public FirebaseAuth mAuth;
             }
         } );
 
-       login = findViewById( R.id.login_btn );
-       email = findViewById( R.id.Login_email );
-       password = findViewById( R.id.login_password );
+       login = findViewById( R.id.login_btn);
+       email = findViewById( R.id.Login_email);
+       password = findViewById( R.id.login_password);
              login.setOnClickListener( new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {

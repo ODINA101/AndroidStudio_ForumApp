@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    buildToolsVersion "27.0.1"
     compileSdkVersion 27
     defaultConfig {
         applicationId "app.iraklisamniashvilii.com.geoforum"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 3
         versionName "3.1"
@@ -53,6 +54,7 @@ dependencies {
     implementation 'com.mikepenz:actionitembadge:3.3.2@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.0.6.0@aar'
     implementation "com.mikepenz:iconics-core:3.0.3@aar"
+    compile "me.leolin:ShortcutBadger:1.1.21@aar"
 }
 
 

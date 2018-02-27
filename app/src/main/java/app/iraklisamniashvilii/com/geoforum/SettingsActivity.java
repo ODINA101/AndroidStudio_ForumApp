@@ -81,35 +81,39 @@ public class SettingsActivity extends AppCompatActivity {
  mUserData.addValueEventListener( new ValueEventListener() {
      @Override
      public void onDataChange(DataSnapshot dataSnapshot) {
-         settings_name.setText( dataSnapshot.child("name").getValue().toString() );
+         if(dataSnapshot.child("name").exists()) {
+             settings_name.setText(dataSnapshot.child("name").getValue().toString());
+         }
 
-        if(!dataSnapshot.child( "thumb_image" ).getValue().equals("default")) {
+         if(dataSnapshot.child("thumb_image").exists()) {
+             if (!dataSnapshot.child("thumb_image").getValue().equals("default")) {
 
-            Picasso.with(SettingsActivity.this).load(dataSnapshot.child( "thumb_image" ).getValue().toString()).placeholder( R.drawable.white ).into(mDisplayImage,new com.squareup.picasso.Callback(){
-                @Override
-                public void onSuccess() {
-                    progressBar.setVisibility( View.GONE );
-                }
+                 Picasso.with(SettingsActivity.this).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(mDisplayImage, new com.squareup.picasso.Callback() {
+                     @Override
+                     public void onSuccess() {
+                         progressBar.setVisibility(View.GONE);
+                     }
 
-                @Override
-                public void onError() {
-                    progressBar.setVisibility( View.GONE );
+                     @Override
+                     public void onError() {
+                         progressBar.setVisibility(View.GONE);
 
-                }
-            });
-        }else{
-            Picasso.with( SettingsActivity.this ).load( R.drawable.user ).placeholder( R.drawable.white ).into( mDisplayImage, new Callback() {
-                @Override
-                public void onSuccess() {
-                    progressBar.setVisibility( View.GONE );
-                }
+                     }
+                 });
+             } else {
+                 Picasso.with(SettingsActivity.this).load(R.drawable.user).placeholder(R.drawable.white).into(mDisplayImage, new Callback() {
+                     @Override
+                     public void onSuccess() {
+                         progressBar.setVisibility(View.GONE);
+                     }
 
-                @Override
-                public void onError() {
-                    progressBar.setVisibility( View.GONE );
-                }
-            } );
-        }
+                     @Override
+                     public void onError() {
+                         progressBar.setVisibility(View.GONE);
+                     }
+                 });
+             }
+         }
 
      }
 

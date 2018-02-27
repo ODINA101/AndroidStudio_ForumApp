@@ -338,13 +338,13 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
 
 
                                    HashMap<String, String> mymap = new HashMap<>();
-                                   mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ მოიწონა თქვენი კომენტარი");
+                                   mymap.put("content", dataSnapshot.child("name").getValue() + "_ამ მოიწონა თქვენი კომენტარი");
                                    mymap.put("seen","false");
 
 
-                                   FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+                              FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
-                                   FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+                                  FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
                                }
@@ -357,7 +357,9 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                            });
 
 
-                       }
+
+
+                           }
 
 
                    }
