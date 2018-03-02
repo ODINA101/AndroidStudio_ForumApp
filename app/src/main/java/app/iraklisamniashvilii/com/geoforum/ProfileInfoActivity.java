@@ -129,25 +129,40 @@ public ProgressBar mProgress;
 
              @Override
              public void onClick(View view) {
-                 HashMap<String,String> mMap1 = new HashMap<>();
+                 final HashMap<String,String> mMap1 = new HashMap<>();
                  mMap1.put("uid",FirebaseAuth.getInstance().getUid());
-
-                 db.child("followers").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
-                 db.child("chats").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
-
-
-
-             HashMap<String,String> mMap = new HashMap<>();
+                 final HashMap<String,String> mMap = new HashMap<>();
                  mMap.put("uid",uid);
+                 db.child("followers").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
+                 FirebaseDatabase.getInstance().getReference().child("Users")
+                         .child(getIntent().getExtras().getString("uid"))
+                         .child("following")
+                         .child(FirebaseAuth.getInstance().getUid())
+                         .addValueEventListener(new ValueEventListener() {
+                     @Override
+                     public void onDataChange(DataSnapshot dataSnapshot) {
+                         if(dataSnapshot.exists()) {
+                             if(dataSnapshot.getChildrenCount() > 0) {
+                                 db.child("chats").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
+                                 me.child("chats").child(uid).setValue(mMap);
+
+                             }
+                         }
+                     }
+
+                     @Override
+                     public void onCancelled(DatabaseError databaseError) {
+
+                     }
+                 });
 
 
 
 
                  me.child("following").child(uid).setValue(mMap);
-                 me.child("chats").child(uid).setValue(mMap);
 
                  final String ke =  FirebaseDatabase.getInstance().getReference().child("notifications").push().getKey();
-FirebaseDatabase.getInstance().getReference().child("Users").addValueEventListener(new ValueEventListener() {
+FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         HashMap<String,String> mymap = new HashMap<>();

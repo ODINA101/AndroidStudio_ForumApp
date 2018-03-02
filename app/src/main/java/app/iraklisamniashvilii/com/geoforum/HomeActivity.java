@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,14 +33,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.squareup.picasso.Picasso;
+
+import java.net.URISyntaxException;
 
 import app.iraklisamniashvilii.com.geoforum.fragments.Logout;
 import app.iraklisamniashvilii.com.geoforum.fragments.homeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,12 +58,7 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        int badgeCount = 1;
-        ShortcutBadger.applyCount(HomeActivity.this, badgeCount); //for 1.1.4+
-
-
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-
+        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseAuth.getInstance().getUid());
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Fragment mtavari = new homeFragment();
@@ -123,7 +119,6 @@ public class HomeActivity extends AppCompatActivity
     private void setMenuCounter(@IdRes int itemId, int count) {
         TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView();
         view.setText(count > 0 ? String.valueOf(count) : null);
-        if(count < 1) {ShortcutBadger.removeCount(HomeActivity.this);}
     }
 
 
@@ -151,7 +146,6 @@ public class HomeActivity extends AppCompatActivity
 
 
                setMenuCounter(R.id.nav_notifications, (int) dataSnapshot.getChildrenCount());
-           ShortcutBadger.applyCount(HomeActivity.this,(int) dataSnapshot.getChildrenCount());
        }
 
        @Override
