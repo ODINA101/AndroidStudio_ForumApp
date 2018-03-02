@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
  */
 
 public class websockets {
-    Socket mSocket = null;
+    Socket mSocket = null; 
 
     public websockets() {
         try {
