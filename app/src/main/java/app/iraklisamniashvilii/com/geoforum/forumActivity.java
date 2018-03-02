@@ -18,6 +18,7 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.view.View;
+        import android.view.ViewGroup;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ProgressBar;
@@ -25,6 +26,7 @@ package app.iraklisamniashvilii.com.geoforum;
         import android.support.v7.widget.Toolbar;
 
         import com.firebase.ui.database.FirebaseRecyclerAdapter;
+        import com.firebase.ui.database.FirebaseRecyclerOptions;
         import com.google.android.gms.tasks.OnCompleteListener;
         import com.google.android.gms.tasks.Task;
         import com.google.firebase.auth.FirebaseAuth;
@@ -232,17 +234,29 @@ public class forumActivity extends AppCompatActivity {
         });
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        FirebaseRecyclerOptions<postReplyModel> options
+                = new FirebaseRecyclerOptions.Builder<postReplyModel>()
 
+                .setQuery(
+                        FirebaseDatabase.getInstance().getReference().child("comments").child(getIntent().getExtras().getString("category")).child(getIntent().getExtras().getString("postTitle"))
+, postReplyModel.class
 
+                )
+                .build();
         FirebaseRecyclerAdapter<postReplyModel, replyViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<postReplyModel, replyViewHolder>(
-                postReplyModel.class,
-                R.layout.single_post_replies,
-                replyViewHolder.class,
-                FirebaseDatabase.getInstance().getReference().child("comments").child(getIntent().getExtras().getString("category")).child(getIntent().getExtras().getString("postTitle"))
-
+               options
         ) {
+
+            @NonNull
             @Override
-            protected void populateViewHolder(final replyViewHolder viewHolder, final postReplyModel model, final int position) {
+            public replyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = getLayoutInflater().inflate(R.layout.single_post_replies,parent,false);
+
+                return new replyViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final replyViewHolder viewHolder, @SuppressLint("RecyclerView") final int position, @NonNull final postReplyModel model) {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setContent(model.getContent());
 
@@ -253,11 +267,11 @@ public class forumActivity extends AppCompatActivity {
                         .child(getRef(position).getKey()).child("likes").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-if(dataSnapshot.exists()) {
-viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
-}else{
-    viewHolder.LikeNum("");
-}
+                        if(dataSnapshot.exists()) {
+                            viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
+                        }else{
+                            viewHolder.LikeNum("");
+                        }
 
 
                     }
@@ -299,12 +313,12 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                         .orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                   if(dataSnapshot.getChildrenCount() > 0) {
-            viewHolder.LikedOrNot(true);
-                   }else{
-                       viewHolder.LikedOrNot(false);
+                        if(dataSnapshot.getChildrenCount() > 0) {
+                            viewHolder.LikedOrNot(true);
+                        }else{
+                            viewHolder.LikedOrNot(false);
 
-                   }
+                        }
 
 
                     }
@@ -317,62 +331,62 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                 final String rf = getRef(position).getKey();
 
                 viewHolder.like_btn.setOnLikeListener(new OnLikeListener() {
-                   @Override
-                   public void liked(LikeButton likeButton) {
-                       HashMap<String,String> mmmap = new HashMap<>();
-                       mmmap.put("uid",FirebaseAuth.getInstance().getUid());
-                       FirebaseDatabase.getInstance().getReference().child("likes").
-                               child(getIntent().getExtras().getString("category")).
-                               child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).setValue(mmmap);
-                                System.out.print("likedddddddxd");
-                       final String uid = FirebaseAuth.getInstance().getUid();
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        HashMap<String,String> mmmap = new HashMap<>();
+                        mmmap.put("uid",FirebaseAuth.getInstance().getUid());
+                        FirebaseDatabase.getInstance().getReference().child("likes").
+                                child(getIntent().getExtras().getString("category")).
+                                child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).setValue(mmmap);
+                        System.out.print("likedddddddxd");
+                        final String uid = FirebaseAuth.getInstance().getUid();
 
-                       if(!getIntent().getExtras().getString("postUser").equals(uid)) {
-
-
-                           FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-                               @Override
-                               public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                   String ke = mDatabase.push().getKey();
+                        if(!getIntent().getExtras().getString("postUser").equals(uid)) {
 
 
-                                   HashMap<String, String> mymap = new HashMap<>();
-                                   mymap.put("content", dataSnapshot.child("name").getValue() + "_ამ მოიწონა თქვენი კომენტარი");
-                                   mymap.put("seen","false");
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    String ke = mDatabase.push().getKey();
 
 
-                              FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
-
-                                  FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
-
-
-                               }
+                                    HashMap<String, String> mymap = new HashMap<>();
+                                    mymap.put("content", dataSnapshot.child("name").getValue() + "_ამ მოიწონა თქვენი კომენტარი");
+                                    mymap.put("seen","false");
 
 
-                               @Override
-                               public void onCancelled(DatabaseError databaseError) {
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
-                               }
-                           });
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
+                                }
 
 
-                           }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
 
 
-                   }
-
-                   @Override
-                   public void unLiked(LikeButton likeButton) {
-                       FirebaseDatabase.getInstance().getReference().child("likes").
-                               child(getIntent().getExtras().getString("category")).
-                               child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).removeValue();
 
 
-                  }
-               });
+                        }
+
+
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        FirebaseDatabase.getInstance().getReference().child("likes").
+                                child(getIntent().getExtras().getString("category")).
+                                child(getIntent().getExtras().getString("postTitle")).child(rf).child("likes").child(FirebaseAuth.getInstance().getUid()).removeValue();
+
+
+                    }
+                });
 
 
                 if(model.getDate() != null) {
@@ -380,7 +394,7 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                 }else{
                     ///////////////
                 }
-                    viewHolder.setPhoto(model.getUid());
+                viewHolder.setPhoto(model.getUid());
                 viewHolder.photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -394,23 +408,22 @@ viewHolder.LikeNum(Long.toString(dataSnapshot.getChildrenCount()));
                     }
                 });
 
-               viewHolder.replyBTN.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-       Intent commentSection = new Intent(forumActivity.this,commentsActivity.class);
+                viewHolder.replyBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent commentSection = new Intent(forumActivity.this,commentsActivity.class);
 
-       commentSection.putExtra("ref", getRef(position).getKey());
-       commentSection.putExtra("posterUid",model.getUid());
-       startActivity(commentSection);
-                   }
-               });
-
+                        commentSection.putExtra("ref", getRef(position).getKey());
+                        commentSection.putExtra("posterUid",model.getUid());
+                        startActivity(commentSection);
+                    }
+                });
 
             }
         };
 
         recyclerView.setAdapter(firebaseRecyclerAdapter);
-
+firebaseRecyclerAdapter.startListening();
 
     }
 

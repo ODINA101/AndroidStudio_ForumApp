@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.squareup.picasso.Picasso;
@@ -60,7 +61,7 @@ public class HomeActivity extends AppCompatActivity
         ShortcutBadger.applyCount(HomeActivity.this, badgeCount); //for 1.1.4+
 
 
-
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

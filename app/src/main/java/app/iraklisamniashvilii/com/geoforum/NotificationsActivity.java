@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -59,10 +60,6 @@ public class NotificationsActivity extends Fragment{
                   FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid())
                             .child(snapshot.getKey()).child("seen").setValue("true");
 
-
-
-
-
                 }
 
 
@@ -79,22 +76,31 @@ public class NotificationsActivity extends Fragment{
         super.onViewCreated( view, savedInstanceState );
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle( "შეტყობინებები" );
 
+        FirebaseRecyclerOptions<NotiModel> options =
+                new FirebaseRecyclerOptions.Builder<NotiModel>()
+                        .setQuery(databaseReference, NotiModel.class)
+                        .build();
+
+
 
         FirebaseRecyclerAdapter<NotiModel,NotiViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<NotiModel, NotiViewHolder>(
-                NotiModel.class,
-                R.layout.single_notification,
-                NotiViewHolder.class,
-                databaseReference
-
+               options
 
 
         ) {
+            @NonNull
             @Override
-            protected void populateViewHolder(NotiViewHolder viewHolder, NotiModel model, int position) {
-                  viewHolder.seAction(model.getContent());
-                  viewHolder.seTime(model.getDate());
-
+            public NotiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new NotiViewHolder(getLayoutInflater().inflate(R.layout.single_notification,parent,false));
             }
+
+            @Override
+            protected void onBindViewHolder(@NonNull NotiViewHolder viewHolder, int position, @NonNull NotiModel model) {
+                viewHolder.seAction(model.getContent());
+                viewHolder.seTime(model.getDate());
+            }
+
+
         };
 
 
@@ -103,6 +109,8 @@ public class NotificationsActivity extends Fragment{
         linearLayoutManager.setReverseLayout(true);
 recyclerView.setAdapter(firebaseRecyclerAdapter);
 recyclerView.setLayoutManager(linearLayoutManager);
+        firebaseRecyclerAdapter.startListening();
+
     }
 
 

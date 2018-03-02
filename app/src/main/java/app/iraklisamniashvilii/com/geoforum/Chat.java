@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,20 +54,23 @@ public class Chat extends Fragment {
         linearLayoutManager.setStackFromEnd( true );
          rec.setLayoutManager(linearLayoutManager);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle( "ჩათი" );
+        FirebaseRecyclerOptions<Chatusers> options = new FirebaseRecyclerOptions.Builder<Chatusers>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("chats"),Chatusers.class)
+                .build();
 
 
         FirebaseRecyclerAdapter<Chatusers,ChatusersHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chatusers, ChatusersHolder>(
-                Chatusers.class,
-                R.layout.single_user_chat,
-                ChatusersHolder.class,
-                FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("chats")
-
-
+                 options
         ) {
+            @NonNull
             @Override
-            protected void populateViewHolder(ChatusersHolder viewHolder, final Chatusers model, int position) {
+            public ChatusersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+               View view = getLayoutInflater().inflate(R.layout.single_user_chat, parent,false);
+               return new ChatusersHolder(view);
+            }
 
-
+            @Override
+            protected void onBindViewHolder(@NonNull ChatusersHolder viewHolder, int position, @NonNull final Chatusers model) {
 
                 viewHolder.setDet(model.getUid());
                 viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +81,14 @@ public class Chat extends Fragment {
                         startActivity(chatroom);
                     }
                 });
-
-
             }
+
+
         };
 
         rec.setAdapter(firebaseRecyclerAdapter);
 
+        firebaseRecyclerAdapter.startListening();
 
     }
 

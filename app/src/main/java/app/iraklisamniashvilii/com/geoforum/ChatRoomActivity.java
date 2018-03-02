@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.ActionBar;
@@ -18,6 +19,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +38,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.zip.Inflater;
 
 import app.iraklisamniashvilii.com.geoforum.models.MessagesModel;
 
@@ -129,36 +133,45 @@ public class ChatRoomActivity extends AppCompatActivity {
                .child(getIntent().getExtras().getString("uid"));
 
 
+        FirebaseRecyclerOptions<MessagesModel> options =
+                new FirebaseRecyclerOptions.Builder<MessagesModel>()
+                .setQuery(msgRef,MessagesModel.class).build();
+
 
 
        final FirebaseRecyclerAdapter<MessagesModel,MessagesViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<MessagesModel, MessagesViewHolder>(
 
-                MessagesModel.class,
-                R.layout.msg_bubble,
-                MessagesViewHolder.class,
-                msgRef
+              options
+
         ) {
-            @Override
-            protected void populateViewHolder(MessagesViewHolder viewHolder, MessagesModel model, int position) {
+           @NonNull
+           @Override
+           public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+              View view = getLayoutInflater().inflate(R.layout.msg_bubble,parent,false);
+
+               return new MessagesViewHolder(view);
+           }
+
+           @Override
+           protected void onBindViewHolder(@NonNull MessagesViewHolder viewHolder, int position, @NonNull MessagesModel model) {
+               viewHolder.setMsg(model.getTxt());
 
 
-
-          viewHolder.setMsg(model.getTxt());
-
-
-                if(model.getUid().toString().equals(FirebaseAuth.getInstance().getUid())) {
-                    viewHolder.gra.setGravity(Gravity.RIGHT);
-                    viewHolder.bubble.setBackground(getDrawable(R.drawable.rounded_rectangle_orange));
+               if(model.getUid().toString().equals(FirebaseAuth.getInstance().getUid())) {
+                   viewHolder.gra.setGravity(Gravity.RIGHT);
+                   viewHolder.bubble.setBackground(getDrawable(R.drawable.rounded_rectangle_orange));
 
 
-                }else{
-                    viewHolder.gra.setGravity(Gravity.LEFT);
-                    viewHolder.bubble.setBackground(getDrawable(R.drawable.rounded_rectangle_purple));
+               }else{
+                   viewHolder.gra.setGravity(Gravity.LEFT);
+                   viewHolder.bubble.setBackground(getDrawable(R.drawable.rounded_rectangle_purple));
 
 
-                }
+               }
+           }
 
-            }
+
 
 
 
@@ -166,6 +179,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         };
 
         messages_recycler.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
 
 msgRef.addValueEventListener(new ValueEventListener() {
     @Override

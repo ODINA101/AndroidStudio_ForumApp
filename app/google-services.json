@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "963327341994-hfc5hs4ar8kdfrtsuv64q922633oqu3g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.iraklisamniashvilii.com.geoforum",
+            "certificate_hash": "974dfb58c37a977178b96e4f4373d1a4ab90450c"
+          }
+        },
+        {
+          "client_id": "963327341994-988kcpe4ks6sah5vecneaju5lkrkdf9q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.iraklisamniashvilii.com.geoforum",
+            "certificate_hash": "bbdda7dc66e7c229a54add3ff78a2fe12b5bce28"
+          }
+        },
+        {
           "client_id": "963327341994-ep4bldoccgd60qolfs8n35gr8678ggau.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

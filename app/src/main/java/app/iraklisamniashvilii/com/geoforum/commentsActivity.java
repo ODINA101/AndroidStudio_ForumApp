@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -121,47 +123,58 @@ final String posterUid = getIntent().getStringExtra("posterUid");
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
+        FirebaseRecyclerOptions<ReplycommentsModel>  options
+                = new FirebaseRecyclerOptions.Builder<ReplycommentsModel>()
+                .setQuery(mDatabase,ReplycommentsModel.class).build();
+
         final FirebaseRecyclerAdapter<ReplycommentsModel,commentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ReplycommentsModel, commentViewHolder>(
-                ReplycommentsModel.class,
-                R.layout.single_reply_comment,
-                commentViewHolder.class,
-                mDatabase
+              options
 
 
         ) {
+            @NonNull
             @Override
-            protected void populateViewHolder(final commentViewHolder viewHolder, ReplycommentsModel model, int position) {
+            public commentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                  viewHolder.setDate(model.getDate());
-                    viewHolder.setContent(model.getContent());
+                View view = getLayoutInflater().inflate(R.layout.single_reply_comment,parent,false);
 
-                       FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
-                          @Override
-                          public void onDataChange(DataSnapshot dataSnapshot) {
-                                System.out.print(dataSnapshot.child("name").getValue());
+                return new commentViewHolder(view);
+            }
 
-                             System.out.print(dataSnapshot);
-                             System.out.print(dataSnapshot);
-                              System.out.print(dataSnapshot);
-                             System.out.print(dataSnapshot);
+            @Override
+            protected void onBindViewHolder(@NonNull final commentViewHolder viewHolder, int position, @NonNull ReplycommentsModel model) {
+                viewHolder.setDate(model.getDate());
+                viewHolder.setContent(model.getContent());
 
-                           viewHolder.uname.setText(dataSnapshot.child("name").getValue().toString());
-                              viewHolder.setPhoto(dataSnapshot.child("thumb_image").getValue().toString());
+                FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        System.out.print(dataSnapshot.child("name").getValue());
 
-                          }
+                        System.out.print(dataSnapshot);
+                        System.out.print(dataSnapshot);
+                        System.out.print(dataSnapshot);
+                        System.out.print(dataSnapshot);
 
-                        @Override
-                           public void onCancelled(DatabaseError databaseError) {
+                        viewHolder.uname.setText(dataSnapshot.child("name").getValue().toString());
+                        viewHolder.setPhoto(dataSnapshot.child("thumb_image").getValue().toString());
 
-                          }
-                      });
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
             }
+
+
         };
 
 recyclerView.setAdapter(firebaseRecyclerAdapter);
-
+        firebaseRecyclerAdapter.startListening();
 mDatabase.addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {

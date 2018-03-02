@@ -139,12 +139,13 @@
                     android:id="@+id/likesNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
                     android:layout_marginTop="13dp" />
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/replyBTN"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/ic_mode_comment_black_24dp" />
