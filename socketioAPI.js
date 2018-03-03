@@ -12,10 +12,10 @@ app.get('/',(req,res)=>{
 
 var serverKey = 'AAAA4ErItao:APA91bHYKmm5PvYVZCqrTrKPdkJlsz_PMbDlDuQCSYDv_EJ-kSEiFstYYkRo31OESVdWxmijZ0j4RZEp2VlD8eopQuIyMJBlRdAiTyFZmya1auDBe1ZzCzt2pVz6FCBVgsIcNwuIC1Hc';
 
-  //  io.on('connection',(socket)=>{
-  //     console.log('connected');
-  //
-  // socket.on('push',(id,dat)=>{
+    io.on('connection',(socket)=>{
+       console.log('connected');
+
+   socket.on('push',(id,dat)=>{
 var fcm = new FCM(serverKey);
 
 var message = {
@@ -26,6 +26,7 @@ var message = {
     },
     notification: {
         body: 'test',
+        sound : "./msgsound.mp3"
     }
 };
 
@@ -41,4 +42,5 @@ fcm.send(message)
         console.error(err);
  });
 
-// });
+  });
+});
