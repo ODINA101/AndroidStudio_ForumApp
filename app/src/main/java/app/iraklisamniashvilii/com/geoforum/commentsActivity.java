@@ -72,8 +72,9 @@ final String posterUid = getIntent().getStringExtra("posterUid");
             FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პასუხზე");
+                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პასუხზე");
                     mymap.put("seen", "false");
+                    mymap.put("uid",FirebaseAuth.getInstance().getUid());
 
                     FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
 

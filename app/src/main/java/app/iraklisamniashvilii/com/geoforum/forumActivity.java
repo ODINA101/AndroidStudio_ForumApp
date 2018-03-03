@@ -198,8 +198,9 @@ public class forumActivity extends AppCompatActivity {
 
 
                                     HashMap<String, String> mymap = new HashMap<>();
-                                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_ამ დააკომენტარა თქვენს პოსტზე");
+                                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პოსტზე");
                                     mymap.put("seen", "false");
+                                    mymap.put("uid",FirebaseAuth.getInstance().getUid());
 
 
                                     FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
@@ -352,8 +353,9 @@ public class forumActivity extends AppCompatActivity {
 
 
                                     HashMap<String, String> mymap = new HashMap<>();
-                                    mymap.put("content", dataSnapshot.child("name").getValue() + "_ამ მოიწონა თქვენი კომენტარი");
+                                    mymap.put("content", dataSnapshot.child("name").getValue() + "_მ მოიწონა თქვენი კომენტარი");
                                     mymap.put("seen","false");
+                                    mymap.put("uid",FirebaseAuth.getInstance().getUid());
 
 
                                     FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);

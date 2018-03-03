@@ -77,6 +77,13 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+        try {
+            new websockets();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         mUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

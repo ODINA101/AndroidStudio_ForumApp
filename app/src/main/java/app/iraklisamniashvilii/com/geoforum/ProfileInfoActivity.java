@@ -168,6 +168,7 @@ FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.
         HashMap<String,String> mymap = new HashMap<>();
         mymap.put("content",dataSnapshot.child( "name" ).getValue() + "_მ გამოიწერა თქვენი პროფილი");
         mymap.put("seen","false");
+        mymap.put("uid",FirebaseAuth.getInstance().getUid());
 
             FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("uid")).child(ke).setValue(mymap);
 

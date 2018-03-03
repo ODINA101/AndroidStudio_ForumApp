@@ -1,10 +1,12 @@
 package app.iraklisamniashvilii.com.geoforum;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +39,7 @@ public class NotificationsActivity extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.mRecy);
           databaseReference = FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid());
         cleanNoti = view.findViewById(R.id.cleanNoti);
@@ -95,12 +97,37 @@ public class NotificationsActivity extends Fragment{
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull NotiViewHolder viewHolder, int position, @NonNull NotiModel model) {
+            protected void onBindViewHolder(@NonNull NotiViewHolder viewHolder, int position, @NonNull final NotiModel model) {
                 viewHolder.seAction(model.getContent());
                 viewHolder.seTime(model.getDate());
+                if (model.getUid()!= null) {
+                    viewHolder.crd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Intent profileInfo = new Intent(view.getContext(), ProfileInfoActivity.class);
+
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    profileInfo.putExtra("name", dataSnapshot.child("name").getValue().toString());
+                                    profileInfo.putExtra("uid", model.getUid());
+                                    profileInfo.putExtra("psUser", FirebaseAuth.getInstance().getUid());
+                                    startActivity(profileInfo);
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+
+                    });
+                }
+
             }
-
-
         };
 
 
@@ -117,13 +144,14 @@ recyclerView.setLayoutManager(linearLayoutManager);
     public static class NotiViewHolder extends RecyclerView.ViewHolder {
 private TextView content;
 private TextView dattime;
-
+private CardView crd;
 
         public NotiViewHolder(View itemView) {
             super(itemView);
 
             content = itemView.findViewById(R.id.content);
             dattime = itemView.findViewById(R.id.dattime);
+            crd = itemView.findViewById(R.id.mCrd);
 
         }
 
