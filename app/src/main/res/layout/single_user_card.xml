@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/myDiv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:widht="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    app:ignore="NamespaceTypo">
 
     <android.support.v7.widget.CardView
         android:id="@+id/post_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:clickable="true"
-        android:elevation="20dp"
+        android:elevation="10dp"
         android:foreground="?android:attr/selectableItemBackground">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -23,15 +26,16 @@
                 android:id="@+id/profile_image"
                 android:layout_width="49dp"
                 android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/user"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/post_title_oncard"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.68"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
@@ -41,19 +45,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="სათაური"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/progressBar2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                widht:layout_constraintBottom_toBottomOf="parent"
+                widht:layout_constraintEnd_toEndOf="parent"
+                widht:layout_constraintStart_toEndOf="@+id/progressBar2"
+                widht:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
                 android:id="@+id/progressBar2"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_image"
@@ -61,51 +72,14 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
                 app:layout_constraintTop_toTopOf="@+id/profile_image"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="1.0"
+                widht:layout_constraintBottom_toBottomOf="parent"
+                widht:layout_constraintEnd_toEndOf="parent"
+                widht:layout_constraintHorizontal_bias="0.258"
+                widht:layout_constraintStart_toStartOf="parent"
+                widht:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/post_time"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="250dp"
-                android:layout_marginTop="40dp"
-                android:gravity="left|right|bottom"
-                android:text="1min ago" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/post_time"
-                android:layout_marginBottom="6dp"
-                android:orientation="horizontal">
-
-                <com.like.LikeButton
-
-                    android:id="@+id/like_btn2"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="15dp"
-                    app:icon_type="star"
-                    app:is_enabled="false" />
-
-                <TextView
-                    android:id="@+id/postlikenm"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+
+</RelativeLayout>

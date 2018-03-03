@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import app.iraklisamniashvilii.com.geoforum.models.NotiModel;
 import app.iraklisamniashvilii.com.geoforum.models.postModel;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -120,6 +122,28 @@ public class CategoryFull extends AppCompatActivity {
 
                     }
                 });
+
+
+
+                FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("title"))
+                        .child(getRef(position).getKey())
+                        .child("likes").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            viewHolder.postlikenm.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                        }else{
+                            viewHolder.postlikenm.setText("");
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
                 FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,18 +193,25 @@ public class CategoryFull extends AppCompatActivity {
         private TextView date;
         private ProgressBar progressBar;
         private CardView cardView;
+        private TextView postlikenm;
 
         View mView;
 
         public postviewholder(View itemView) {
             super( itemView );
             mView = itemView;
-
+            postlikenm = mView.findViewById(R.id.postlikenm);
             profile_image = mView.findViewById( R.id.profile_image );
             posttitle = mView.findViewById( R.id.post_title_oncard );
             date = mView.findViewById( R.id.post_time );
             progressBar = mView.findViewById( R.id.progressBar2 );
             cardView = mView.findViewById( R.id.post_card );
+
+        }
+
+
+        void setlikesnum(String nm) {
+            postlikenm.setText(nm);
 
         }
 

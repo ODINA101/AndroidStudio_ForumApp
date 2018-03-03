@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -46,7 +47,7 @@ public class Chat extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated( view, savedInstanceState );
          rec = view.findViewById(R.id.rec);
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -70,13 +71,14 @@ public class Chat extends Fragment {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull ChatusersHolder viewHolder, int position, @NonNull final Chatusers model) {
+            protected void onBindViewHolder(@NonNull final ChatusersHolder viewHolder, int position, @NonNull final Chatusers model) {
 
                 viewHolder.setDet(model.getUid());
                 viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent chatroom = new Intent(getContext(),ChatRoomActivity.class);
+
                         chatroom.putExtra("uid",model.getUid());
                         startActivity(chatroom);
                     }

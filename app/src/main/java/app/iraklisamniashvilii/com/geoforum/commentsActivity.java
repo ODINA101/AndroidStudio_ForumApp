@@ -25,8 +25,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import app.iraklisamniashvilii.com.geoforum.models.ReplycommentsModel;
@@ -55,40 +58,6 @@ private EditText editText;
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("replycomments").child(getIntent().getExtras().getString("ref"));
 
-final String posterUid = getIntent().getStringExtra("posterUid");
-
-
-
-/////////////
-        final String ke = mDatabase.push().getKey();
-
-
-        final HashMap<String,String> mymap = new HashMap<>();
-
-
-
-        if(!posterUid.equals(FirebaseAuth.getInstance().getUid())) {
-
-            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პასუხზე");
-                    mymap.put("seen", "false");
-                    mymap.put("uid",FirebaseAuth.getInstance().getUid());
-
-                    FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
-
-                    FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-
 
 
 
@@ -113,7 +82,80 @@ final String posterUid = getIntent().getStringExtra("posterUid");
 
                 mDatabase.child(key).child("date").setValue(ServerValue.TIMESTAMP);
 
-           }
+
+
+
+                 final String posterUid = getIntent().getStringExtra("posterUid");
+
+
+
+/////////////
+                 final String ke = mDatabase.push().getKey();
+
+
+                 final HashMap<String,String> mymap = new HashMap<>();
+
+
+
+                 if(!posterUid.equals(FirebaseAuth.getInstance().getUid())) {
+
+                     FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                         @Override
+                         public void onDataChange(DataSnapshot dataSnapshot) {
+                             mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პასუხზე");
+                             mymap.put("seen", "false");
+                             mymap.put("uid",FirebaseAuth.getInstance().getUid());
+
+                             FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).setValue(mymap);
+
+                             FirebaseDatabase.getInstance().getReference().child("notifications").child(posterUid).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+                             websockets socket = null;
+                             JSONObject mb = new JSONObject();
+
+
+                             try {
+                                 socket = new websockets();
+                                 try {
+                                     mb.putOpt("content",dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პასუხზე");
+                                     mb.putOpt("usertoken",posterUid);
+
+                                 } catch (JSONException e) {
+                                     e.printStackTrace();
+                                 }
+                                 socket.mSocket.emit("notification",mb);
+                             } catch (URISyntaxException e) {
+                                 e.printStackTrace();
+                             }
+
+
+
+
+
+
+
+
+
+
+                         }
+
+                         @Override
+                         public void onCancelled(DatabaseError databaseError) {
+
+                         }
+                     });
+                 }
+
+
+
+
+
+
+
+
+
+
+
+             }
         });
 
 

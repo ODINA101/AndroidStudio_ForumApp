@@ -7,83 +7,85 @@
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-   <android.support.v7.widget.CardView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:elevation="10dp">
-
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/user_single_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="1 saatis win"
-        app:layout_constraintBottom_toTopOf="@+id/user_single_comment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/user_single_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="5dp"
+        android:elevation="10dp">
 
-    <TextView
-        android:id="@+id/user_single_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/user_single_image"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/user_single_image"
-        android:text="Display Name"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/user_single_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintStart_toEndOf="@+id/user_single_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/user_single_comment"
-        android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/user_single_name"
-        android:layout_below="@+id/user_single_name"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:autoSizeTextType="uniform"
-        android:text="User defaulddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt status"
-        app:layout_constraintBottom_toBottomOf="@+id/user_single_image"
-        app:layout_constraintEnd_toEndOf="@+id/user_single_name"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="@+id/user_single_name"
-        app:layout_constraintTop_toBottomOf="@+id/user_single_name"
-        app:layout_constraintVertical_bias="0.0" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_single_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>   </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="1 saatis win"
+                app:layout_constraintBottom_toTopOf="@+id/user_single_comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/user_single_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/user_single_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/user_single_image"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/user_single_image"
+                android:text="Display Name"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/user_single_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.06"
+                app:layout_constraintStart_toEndOf="@+id/user_single_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/user_single_comment"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/user_single_name"
+                android:layout_below="@+id/user_single_name"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:autoSizeTextType="uniform"
+                android:text="User defaulddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt status"
+                app:layout_constraintBottom_toBottomOf="@+id/user_single_image"
+                app:layout_constraintEnd_toEndOf="@+id/user_single_name"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="@+id/user_single_name"
+                app:layout_constraintTop_toBottomOf="@+id/user_single_name"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

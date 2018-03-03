@@ -10,6 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import app.iraklisamniashvilii.com.geoforum.R;
 
 /**
@@ -64,11 +69,38 @@ public class CustomListviewAdapter  extends BaseAdapter {
         TextView Tname = convertView.findViewById( R.id.tname );
         ImageView img = convertView.findViewById( R.id.img_icon );
         convertView.setTag(holder);
-
+        final TextView postnum;
+        postnum = convertView.findViewById(R.id.postnum);
 
         holder = (ViewHolder) convertView.getTag();
+
         Tname.setText( names[position] );
         img.setImageResource( icons[position] );
+
+        FirebaseDatabase.getInstance().getReference().child("Posts").child(names[position]).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if(dataSnapshot.exists()) {
+                    if(dataSnapshot.getChildrenCount() > 0) {
+                          postnum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+
+                    }else{
+                        postnum.setText("");
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         return convertView;
     }

@@ -11,12 +11,12 @@ import java.net.URISyntaxException;
  */
 
 public class websockets {
-public Socket mSocket = null;
+    public Socket mSocket = null;
 
     public websockets() throws URISyntaxException {
 
-            this.mSocket = IO.socket("http://forum-api.herokuapp.com/");
-            this.mSocket.connect();
+        this.mSocket = IO.socket("http://192.168.1.102:3000/");
+        this.mSocket.connect();
 
     }
 

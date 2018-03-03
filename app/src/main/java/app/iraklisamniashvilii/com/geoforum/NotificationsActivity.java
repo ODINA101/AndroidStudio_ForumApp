@@ -151,7 +151,7 @@ private CardView crd;
 
             content = itemView.findViewById(R.id.content);
             dattime = itemView.findViewById(R.id.dattime);
-            crd = itemView.findViewById(R.id.mCrd);
+            crd = itemView.findViewById(R.id.mCord);
 
         }
 
@@ -168,7 +168,10 @@ private CardView crd;
 
         }
         public void seTime(Long dat) {
-            dattime.setText(new timeago().gettimeago(dat,itemView.getContext()));
+         if(dat != null) {
+             dattime.setText(new timeago().gettimeago(dat,itemView.getContext()));
+
+         }
 
 
 

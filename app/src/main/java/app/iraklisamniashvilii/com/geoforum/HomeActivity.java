@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
 
@@ -49,7 +57,7 @@ public class HomeActivity extends AppCompatActivity
     private CircleImageView mDisplayImage;
     public ProgressBar header_progress;
     public NavigationView navigationView;
-
+  public websockets mSocket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +86,22 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
 
+
+
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+
+
+
+
+
+
+
+
+
         try {
-            new websockets();
+          mSocket = new websockets();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -129,7 +151,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
+@Override
+public void onResume() {
 
+    super.onResume();
+    FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -142,10 +170,42 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
 
+
+        int badgeCount = 0;
+        ActionItemBadge.update(this, menu.findItem(R.id.item_samplebadge), FontAwesome.Icon.faw_users, ActionItemBadge.BadgeStyles.DARK_GREY, badgeCount);
+
+        mSocket.mSocket.emit("howmuchUser");
+
+
+        mSocket.mSocket.on("Users", new Emitter.Listener() {
+           @Override
+
+            public void call(final Object... args) {
+                runOnUiThread(new Runnable() {
+                     @Override
+                   public void run() {
+                        JSONObject data = (JSONObject) args[0];
+
+                        try {
+
+                                   int badgeCount =  data.getInt("users");
+                             ActionItemBadge.update(menu.findItem(R.id.item_samplebadge), badgeCount);
+
+                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                 }
+
+               });
+            }
+
+
+
+       });
 
    FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getUid()).orderByChild("seen").equalTo("false").addValueEventListener(new ValueEventListener() {
        @Override
@@ -185,15 +245,29 @@ public class HomeActivity extends AppCompatActivity
 
 
 
+        //If you want to add your ActionItem programmatically you can do this too. You do the following:
         return super.onOptionsItemSelected( item );
     }
 
 
     public void sendToStart() {
         Intent startpage = new Intent(HomeActivity.this,MainActivity.class);
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+
         startActivity( startpage );
         finish();
     }
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

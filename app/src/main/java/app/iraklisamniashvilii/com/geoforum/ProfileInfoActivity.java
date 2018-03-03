@@ -21,6 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -135,9 +139,8 @@ public ProgressBar mProgress;
                  mMap.put("uid",uid);
                  db.child("followers").child(FirebaseAuth.getInstance().getUid()).setValue(mMap1);
                  FirebaseDatabase.getInstance().getReference().child("Users")
-                         .child(getIntent().getExtras().getString("uid"))
-                         .child("following")
-                         .child(FirebaseAuth.getInstance().getUid())
+                         .child(uid)
+                         .child("following").orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid())
                          .addValueEventListener(new ValueEventListener() {
                      @Override
                      public void onDataChange(DataSnapshot dataSnapshot) {
@@ -174,7 +177,19 @@ FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.
 
             FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("uid")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
+        try {
+            websockets socket = new websockets();
 
+            JSONObject mb = new JSONObject();
+
+            mb.putOpt("content",dataSnapshot.child( "name" ).getValue() + "_მ გამოიწერა თქვენი პროფილი");
+            mb.putOpt("usertoken",getIntent().getExtras().getString("uid"));
+            socket.mSocket.emit("notification",mb);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

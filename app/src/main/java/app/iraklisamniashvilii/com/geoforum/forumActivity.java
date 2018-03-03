@@ -42,9 +42,14 @@ package app.iraklisamniashvilii.com.geoforum;
         import com.squareup.picasso.Callback;
         import com.squareup.picasso.Picasso;
 
+        import org.json.JSONException;
+        import org.json.JSONObject;
         import org.w3c.dom.Text;
 
+        import java.lang.reflect.Array;
+        import java.net.URISyntaxException;
         import java.text.SimpleDateFormat;
+        import java.util.ArrayList;
         import java.util.Calendar;
         import java.util.HashMap;
         import java.util.Locale;
@@ -72,6 +77,124 @@ public class forumActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.pprgrs);
         progressBar.animate();
 
+       final LikeButton like_btn2 = findViewById(R.id.like_btn2);
+        FirebaseDatabase.getInstance().getReference().child("likes").
+                child(getIntent().getExtras().getString("category")).
+                child(getIntent().getExtras().getString("postTitle"))
+                .child("likes")
+                .orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() > 0) {
+                    like_btn2.setLiked(true);
+                }else{
+                    like_btn2.setLiked(false);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+       final TextView postLikesNum = findViewById(R.id.postLikesNum);
+
+
+        FirebaseDatabase.getInstance().getReference().child("likes").child(getIntent().getExtras().getString("category"))
+                .child(getIntent().getExtras().getString("postTitle"))
+                .child("likes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    postLikesNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                }else{
+                    postLikesNum.setText("");
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+        like_btn2.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                HashMap<String,String> mmmap2 = new HashMap<>();
+                mmmap2.put("uid",FirebaseAuth.getInstance().getUid());
+                FirebaseDatabase.getInstance().getReference().child("likes").
+                        child(getIntent().getExtras().getString("category")).
+                        child(getIntent().getExtras().getString("postTitle")).child("likes")
+                        .child(FirebaseAuth.getInstance().getUid()).setValue(mmmap2);
+                System.out.print("likedddddddxd");
+                final String uid = FirebaseAuth.getInstance().getUid();
+
+                if(!getIntent().getExtras().getString("postUser").equals(uid)) {
+
+
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            String ke = mDatabase.push().getKey();
+
+
+                            HashMap<String, String> mymap = new HashMap<>();
+                            mymap.put("content", dataSnapshot.child("name").getValue() + "_მ მოიწონა თქვენი პოსტი");
+                            mymap.put("seen","false");
+                            mymap.put("uid",FirebaseAuth.getInstance().getUid());
+
+
+                            FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+
+                            FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+                            try {
+                                websockets socket = new websockets();
+
+                                JSONObject mmm2 = new JSONObject();
+                                mmm2.putOpt("content",dataSnapshot.child("name").getValue() + "_მ მოიწონა თქვენი პოსტი" );
+                                mmm2.putOpt("usertoken", getIntent().getExtras().getString("postUser"));
+                                socket.mSocket.emit("notification",mmm2);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
+                }
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                FirebaseDatabase.getInstance().getReference().child("likes").
+                        child(getIntent().getExtras().getString("category")).
+                        child(getIntent().getExtras().getString("postTitle")).child("likes").child(FirebaseAuth.getInstance().getUid()).removeValue();
+
+            }
+        });
 
         final CircleImageView mUserPhoto = findViewById(R.id.profile_image);
 
@@ -201,7 +324,19 @@ public class forumActivity extends AppCompatActivity {
                                     mymap.put("content", dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პოსტზე");
                                     mymap.put("seen", "false");
                                     mymap.put("uid",FirebaseAuth.getInstance().getUid());
+                                    try {
+                                        websockets socket = new websockets();
 
+        JSONObject mb = new JSONObject();
+
+           mb.putOpt("content",dataSnapshot.child("name").getValue().toString() + "_მ დააკომენტარა თქვენს პოსტზე");
+           mb.putOpt("usertoken",getIntent().getExtras().getString("postUser"));
+                                        socket.mSocket.emit("notification",mb);
+                                    } catch (URISyntaxException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                                     FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
 
@@ -342,7 +477,7 @@ public class forumActivity extends AppCompatActivity {
                         System.out.print("likedddddddxd");
                         final String uid = FirebaseAuth.getInstance().getUid();
 
-                        if(!getIntent().getExtras().getString("postUser").equals(uid)) {
+                        if(!model.getUid().equals(uid)) {
 
 
                             FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addValueEventListener(new ValueEventListener() {
@@ -358,9 +493,22 @@ public class forumActivity extends AppCompatActivity {
                                     mymap.put("uid",FirebaseAuth.getInstance().getUid());
 
 
-                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).setValue(mymap);
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(model.getUid()).child(ke).setValue(mymap);
 
-                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+                                    FirebaseDatabase.getInstance().getReference().child("notifications").child(model.getUid()).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
+
+                                    try {
+                                        websockets socket = new websockets();
+
+                                        JSONObject mmm2 = new JSONObject();
+                                        mmm2.putOpt("content",dataSnapshot.child("name").getValue() + "_მ მოიწონა თქვენი კომენტარი" );
+                                        mmm2.putOpt("usertoken", getIntent().getExtras().getString("postUser"));
+                                        socket.mSocket.emit("notification",mmm2);
+                                    } catch (URISyntaxException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
 
                                 }
@@ -493,9 +641,24 @@ firebaseRecyclerAdapter.startListening();
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                           Picasso.with(mView.getContext()).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(photo);
-                           progressBar.setVisibility(View.GONE);
+                    if(!dataSnapshot.child("thumb_image").getValue().equals("default")) {
+                        Picasso.with(mView.getContext()).load(dataSnapshot.child("thumb_image").getValue().toString()).placeholder(R.drawable.white).into(photo, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progressBar.setVisibility(View.GONE);
 
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                    }else{
+                        Picasso.with(mView.getContext()).load(R.drawable.user).placeholder(R.drawable.white).into(photo);
+                        progressBar.setVisibility(View.GONE);
+
+                    }
 
                         username.setText(dataSnapshot.child("name").getValue().toString());
 

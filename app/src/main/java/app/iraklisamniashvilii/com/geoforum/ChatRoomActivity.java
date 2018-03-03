@@ -37,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.zip.Inflater;
 
@@ -90,12 +92,21 @@ public class ChatRoomActivity extends AppCompatActivity {
         messages_recycler = findViewById(R.id.messages_recycler);
         messages_recycler.setHasFixedSize(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
+        final TextView onlineornot = findViewById(R.id.onlineornot);
         messages_recycler.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(true);
         FirebaseDatabase.getInstance().getReference().child("Users").child(getIntent().getExtras().getString("uid")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.child("isOnline").getValue().equals(true)) {
+                    onlineornot.setText("შემოსულია");
+                }else{
+                    onlineornot.setText("გასულია");
+                }
+
+
+
 
                 TextView titl = mCustomView.findViewById(R.id.userTitle);
                 titl.setText(dataSnapshot.child("name").getValue().toString());
