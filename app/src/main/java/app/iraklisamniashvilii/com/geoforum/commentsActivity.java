@@ -162,8 +162,6 @@ private EditText editText;
             recyclerView =  findViewById(R.id.comments_recycler);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
-        linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
 

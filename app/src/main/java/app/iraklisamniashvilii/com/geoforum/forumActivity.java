@@ -315,9 +315,9 @@ public class forumActivity extends AppCompatActivity {
                                 mMap.put("uid", uid);
 
 
+                                String ke = mDatabase.push().getKey();
 
                                 if(!getIntent().getExtras().getString("postUser").equals(uid)) {
-                                    String ke = mDatabase.push().getKey();
 
 
                                     HashMap<String, String> mymap = new HashMap<>();
@@ -343,6 +343,7 @@ public class forumActivity extends AppCompatActivity {
                                     FirebaseDatabase.getInstance().getReference().child("notifications").child(getIntent().getExtras().getString("postUser")).child(ke).child("date").setValue(ServerValue.TIMESTAMP);
 
 
+
                                     mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -351,8 +352,16 @@ public class forumActivity extends AppCompatActivity {
 
 
                                     mDatabase.child(ke).child("date").setValue(ServerValue.TIMESTAMP);
-
                                     dialog.dismiss();
+                                }else{
+                                    mDatabase.child(ke).setValue(mMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                        }
+                                    });
+
+
+                                    mDatabase.child(ke).child("date").setValue(ServerValue.TIMESTAMP);
                                 }
                             }
 

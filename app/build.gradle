@@ -6,19 +6,26 @@ android {
         applicationId "app.iraklisamniashvilii.com.geoforum"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 3
-        versionName "3.1"
+        versionCode 4
+        versionName "3.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
     }
+
 
     dataBinding {
         enabled true
     }
     buildTypes {
         release {
+            multiDexEnabled = true
             minifyEnabled false
+            lintOptions {
+                disable 'MissingTranslation'
+                checkReleaseBuilds false
+                abortOnError false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -53,11 +60,8 @@ dependencies {
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
     implementation 'com.mikepenz:actionitembadge:3.3.2@aar'
     implementation "com.mikepenz:iconics-core:3.0.3@aar"
-    compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
-    implementation 'com.mikepenz:octicons-typeface:3.2.0.4@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.0.6.0@aar'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
-
 }
 
 
