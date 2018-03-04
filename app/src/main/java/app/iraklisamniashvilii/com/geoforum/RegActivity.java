@@ -94,13 +94,26 @@ public class RegActivity extends AppCompatActivity {
                            finish();
 
                         } else {
-                            Toast.makeText(RegActivity.this,"Cannot Sign In. Please check form and try again",Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegActivity.this,"მოხდა შეცდომა",Toast.LENGTH_LONG).show();
                         }
 
-                        // ...
                     }
                 });
     }
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
+    }
 
 }

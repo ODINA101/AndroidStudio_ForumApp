@@ -2,6 +2,7 @@ package app.iraklisamniashvilii.com.geoforum;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -77,6 +80,8 @@ public class HomeActivity extends AppCompatActivity
         String currentUid = mCurrentUser.getUid();
         mUserData = FirebaseDatabase.getInstance().getReference("Users").child(currentUid);
         mDisplayImage = navigationView.getHeaderView(0).findViewById(R.id.drawer_profile_photo);
+        final TextView username = navigationView.getHeaderView(0).findViewById(R.id.username);
+
         header_progress = navigationView.getHeaderView(0).findViewById(R.id.header_progress);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -97,9 +102,6 @@ public class HomeActivity extends AppCompatActivity
 
 
 
-
-
-
         try {
           mSocket = new websockets();
         } catch (URISyntaxException e) {
@@ -108,10 +110,13 @@ public class HomeActivity extends AppCompatActivity
 
         mUserData.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("thumb_image").exists()) {
                  if (dataSnapshot.child("thumb_image").getValue().equals("default")) {
                      Picasso.with(HomeActivity.this).load(R.drawable.user).into(mDisplayImage);
+
+
+                     username.setText(dataSnapshot.child("name").getValue().toString());
                      header_progress.setVisibility(View.GONE);
 
                  } else {
@@ -120,6 +125,8 @@ public class HomeActivity extends AppCompatActivity
 
                          @Override
                          public void onSuccess() {
+                             username.setText(dataSnapshot.child("name").getValue().toString());
+
                              header_progress.setVisibility(View.GONE);
 
                          }
@@ -150,13 +157,32 @@ public class HomeActivity extends AppCompatActivity
         view.setText(count > 0 ? String.valueOf(count) : null);
     }
 
-
+    private boolean isFirstTime()
+    {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean ranBefore = preferences.getBoolean("RanBefore", false);
+        if (!ranBefore) {
+            // first time
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("RanBefore", true);
+            editor.commit();
+        }
+        return !ranBefore;
+    }
 @Override
 public void onResume() {
 
     super.onResume();
     FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
     }
 
     @Override
@@ -260,13 +286,7 @@ public void onResume() {
 
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(FirebaseAuth.getInstance().getUid() != null) {
-            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
-        }
-    }
+
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -283,8 +303,15 @@ public void onResume() {
             fragment = new NotificationsActivity();
 
         } else if (id == R.id.nav_chat) {
-           fragment = new Chat();
-        } else if (id == R.id.nav_logout) {
+            fragment = new Chat();
+        }
+else if(id== R.id.nav_search) {
+            fragment = new homeFragment();
+
+            Intent ser = new Intent(HomeActivity.this,SearchActivity.class);
+            startActivity(ser);
+
+    }else if (id == R.id.nav_logout) {
             mAuth.getInstance().signOut();
             fragment = new Logout();
             sendToStart();
@@ -305,4 +332,5 @@ public void onResume() {
         drawer.closeDrawer( GravityCompat.START );
         return true;
     }
+
 }

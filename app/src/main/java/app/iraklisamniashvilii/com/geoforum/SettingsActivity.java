@@ -241,4 +241,19 @@ changename.setOnClickListener(new View.OnClickListener() {
             }
         }
     }
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
+    }
 }

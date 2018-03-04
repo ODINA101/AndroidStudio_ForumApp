@@ -9,8 +9,21 @@
     tools:context="app.iraklisamniashvilii.com.geoforum.SearchActivity"
     tools:layout_editor_absoluteY="81dp">
 
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progressBar4"
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:indicatorName="BallClipRotateIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.3" />
+
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/searchtxt"
         android:layout_width="250dp"
         android:layout_height="38dp"
         android:layout_marginBottom="8dp"
@@ -25,6 +38,7 @@
         android:paddingStart="10dp"
         android:textColor="@color/cardview_light_background"
         android:textColorHint="#dfe4ea"
+        android:textCursorDrawable="@null"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,23 +59,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
+        app:layout_constraintTop_toBottomOf="@+id/searchtxt"
         app:layout_constraintVertical_bias="0.73">
 
     </android.support.v7.widget.RecyclerView>
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/searchbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/searchtxt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText2"
+        app:layout_constraintStart_toEndOf="@+id/searchtxt"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/searchbtn" />
+        app:srcCompat="@drawable/searchbtn"
+        />
 
 </android.support.constraint.ConstraintLayout>

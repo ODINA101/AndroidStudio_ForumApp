@@ -15,7 +15,7 @@ public class websockets {
 
     public websockets() throws URISyntaxException {
 
-        this.mSocket = IO.socket("http://192.168.1.102:3000/");
+        this.mSocket = IO.socket("http://forum-api.herokuapp.com/");
         this.mSocket.connect();
 
     }

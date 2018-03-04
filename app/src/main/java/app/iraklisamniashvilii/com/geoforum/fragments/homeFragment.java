@@ -21,6 +21,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import app.iraklisamniashvilii.com.geoforum.CategoryFull;
 import app.iraklisamniashvilii.com.geoforum.R;
 
@@ -66,7 +69,16 @@ public class homeFragment extends Fragment  {
 
         // Set title bar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle( "ფორუმი" );
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
 
+
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
     }
 }
 

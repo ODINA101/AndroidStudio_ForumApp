@@ -54,6 +54,7 @@ public class Chat extends Fragment {
         linearLayoutManager.setReverseLayout( true );
         linearLayoutManager.setStackFromEnd( true );
          rec.setLayoutManager(linearLayoutManager);
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle( "ჩათი" );
         FirebaseRecyclerOptions<Chatusers> options = new FirebaseRecyclerOptions.Builder<Chatusers>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("chats"),Chatusers.class)
@@ -93,7 +94,21 @@ public class Chat extends Fragment {
         firebaseRecyclerAdapter.startListening();
 
     }
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
+    }
     public static class ChatusersHolder extends RecyclerView.ViewHolder {
 TextView name;
 View mview;

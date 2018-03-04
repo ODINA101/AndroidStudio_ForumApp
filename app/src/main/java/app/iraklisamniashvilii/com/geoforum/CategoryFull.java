@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,7 +80,21 @@ public class CategoryFull extends AppCompatActivity {
     }
 
     /////////////////////////created//////////////////////
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
+    }
     public void loadmore() {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Posts").child(getIntent().getExtras().getString("title"));

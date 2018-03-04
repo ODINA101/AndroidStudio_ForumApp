@@ -6,19 +6,37 @@ package app.iraklisamniashvilii.com.geoforum.models;
 
 public class search {
 
-    String uid;
+ String name;
+    String thumb_image;
 
-    public void search() {}
+    public search() {}
 
-    public String getUid() {
-        return uid;
+    public search(String name, String thumb_image) {
+        this.name = name;
+        this.thumb_image = thumb_image;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+
+    public String getThumb_image() {
+        return thumb_image;
     }
 
-    public search(String uid) {
-        this.uid = uid;
+    public void setThumb_image(String thumb_image) {
+        this.thumb_image = thumb_image;
     }
+
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+
 }

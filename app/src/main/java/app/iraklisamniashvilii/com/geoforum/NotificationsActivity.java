@@ -98,34 +98,39 @@ public class NotificationsActivity extends Fragment{
 
             @Override
             protected void onBindViewHolder(@NonNull NotiViewHolder viewHolder, int position, @NonNull final NotiModel model) {
-                viewHolder.seAction(model.getContent());
-                viewHolder.seTime(model.getDate());
-                if (model.getUid()!= null) {
-                    viewHolder.crd.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Intent profileInfo = new Intent(view.getContext(), ProfileInfoActivity.class);
 
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    profileInfo.putExtra("name", dataSnapshot.child("name").getValue().toString());
-                                    profileInfo.putExtra("uid", model.getUid());
-                                    profileInfo.putExtra("psUser", FirebaseAuth.getInstance().getUid());
-                                    startActivity(profileInfo);
 
-                                }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
 
-                                }
-                            });
 
-                        }
+    viewHolder.seAction(model.getContent());
+    viewHolder.seTime(model.getDate());
+    if (model.getUid() != null) {
+        viewHolder.crd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent profileInfo = new Intent(view.getContext(), ProfileInfoActivity.class);
 
-                    });
-                }
+                FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        profileInfo.putExtra("name", dataSnapshot.child("name").getValue().toString());
+                        profileInfo.putExtra("uid", model.getUid());
+                        profileInfo.putExtra("psUser", FirebaseAuth.getInstance().getUid());
+                        startActivity(profileInfo);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
 
             }
         };
@@ -177,5 +182,19 @@ private CardView crd;
 
         }
 
+    }
+    public void onResume() {
+
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue(true);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("isOnline").setValue("false");
+        }
     }
 }

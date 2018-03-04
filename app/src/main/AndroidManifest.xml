@@ -36,6 +36,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <service android:name=".FBMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity
             android:name=".RegActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -56,9 +63,6 @@
             android:name=".AddNewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NotificationsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".forumActivity"
             android:label="@string/title_activity_forum"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -69,7 +73,9 @@
             android:name=".ChatRoomActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".commentsActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

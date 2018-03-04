@@ -27,6 +27,10 @@
             android:icon="@drawable/ic_chat"
             android:title="ჩატი" />
     <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="ძიება" />
+    <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_logout"
         android:title="გასვლა" />
